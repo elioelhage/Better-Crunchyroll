@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'betterCrunchyrollEnabled';
-const VERSION = '0.2.13';
+const VERSION = '0.2.14';
 
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('Better Crunchyroll installed.');
