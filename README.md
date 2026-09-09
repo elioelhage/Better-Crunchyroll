@@ -1,41 +1,74 @@
 # Better Crunchyroll
 
-A Chrome extension that improves the Crunchyroll web viewing experience.
+An independent Chrome extension focused on improving the Crunchyroll web viewing experience while preserving the native player wherever possible.
 
-## Current version
+## Current Release
 
 **v2.10**
 
-### Features
+The current release focuses on the watch page and fullscreen player experience.
 
-- Restores and preserves the native Crunchyroll video-player skin in fullscreen.
-- Adds a compact Back control that follows player inactivity behavior.
-- Displays the current episode title in the player controls.
-- Adds an episode-list control using Crunchyroll's visual style.
-- Keeps the native Next Episode control available.
-- Includes a clean popup with an animated on/off toggle.
-- Uses the Better Crunchyroll logo, including a grey icon state when disabled.
+### What it does
 
-## Version history
+- Preserves the native Crunchyroll video-player skin in fullscreen.
+- Adds a compact Crunchyroll-style Back control.
+- Hides the Back control after inactivity and prevents it from appearing during the initial playback period.
+- Shows the current episode title in the player controls.
+- Adds an episode-list control styled to fit the native player.
+- Keeps the native **Next Episode** control available.
+- Includes a simplified popup with an animated on/off toggle.
+- Uses the Better Crunchyroll extension artwork, including a grey disabled state.
 
-Earlier development builds are preserved under `versions/` for reference.
+## Design Goals
 
-| Version | Notes |
-|---|---|
-| 2.10 | Current release; player controls, episode title/list, 9-second Back lock, polished control sizing/hover behavior. |
-| 2.9 | Episode title positioning, episode-list control polish, 9-second Back lock. |
-| 2.8 | Stable rebuild after the episode-control observer issue. |
-| 2.7 | Added episode title and episode-list control. |
-| 2.6 | Back control timing and positioning refinements. |
-| 2.5 | Back icon-only control, 6-second fade, enlarged extension icon. |
-| 2.4 | Crunchyroll Back SVG, icon states, and native Next Episode preservation. |
-| 2.3 | Back-control auto-hide and simplified popup. |
-| 2.2 | Restored native Crunchyroll player skin in fullscreen. |
+Better Crunchyroll is intentionally designed around a simple principle: **improve the experience without fighting the native Crunchyroll player**.
 
-## Development
+The player additions are kept compact and visually consistent with the surrounding controls. Native Crunchyroll functionality is preferred whenever it is available instead of recreating the same behavior from scratch.
 
-The extension targets `*.crunchyroll.com` and uses Manifest V3.
+## Version History
+
+The project has evolved through a series of small, focused iterations:
+
+| Version | Highlights |
+| --- | --- |
+| **2.10** | Current release. Player control refinements, episode title/list controls, 9-second Back lock, sizing and hover polish. |
+| **2.9** | Episode title positioning and episode-list control polish. |
+| **2.8** | Stable rebuild of the episode-control implementation. |
+| **2.7** | Added episode title and episode-list functionality. |
+| **2.6** | Back-control positioning and timing refinements. |
+| **2.5** | Icon-only Back control, 6-second fade, larger extension icon. |
+| **2.4** | Crunchyroll Back SVG, icon states, native Next Episode preservation. |
+| **2.3** | Back-control auto-hide and simplified popup. |
+| **2.2** | Restored the native Crunchyroll player skin in fullscreen. |
+
+## Installation (Developer Mode)
+
+1. Download or clone the repository.
+2. Open `chrome://extensions` in Chrome.
+3. Enable **Developer mode**.
+4. Choose **Load unpacked**.
+5. Select the extension directory containing `manifest.json`.
+
+## Project Structure
+
+```text
+Better-Crunchyroll/
+├── manifest.json
+├── crunchyroll-content.js
+├── background.js
+├── popup.html
+├── popup.js
+├── styles.css
+├── icons/
+└── versions/
+```
+
+## Compatibility
+
+The extension targets `*.crunchyroll.com` and uses **Manifest V3**.
 
 ## Disclaimer
 
-Better Crunchyroll is an independent community extension and is not affiliated with or endorsed by Crunchyroll LLC.
+Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
+
+Crunchyroll is a trademark of its respective owner. This project is intended as a personal/community enhancement and does not provide or redistribute Crunchyroll content.
