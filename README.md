@@ -1,76 +1,41 @@
 # Better Crunchyroll
 
-An independent Chrome extension focused on improving the Crunchyroll web viewing experience while preserving the native player wherever possible.
+**Version 0.2.12** refreshes the extension's visual identity with the newly supplied logo, a cleaner popup, and a color/grayscale icon state instead of an ON/OFF badge.
 
-## Current Release
+## Files
+- manifest.json - extension metadata, permissions, icon registration, and content-script registration
+- background.js - service worker, enabled/disabled icon state, and version reporting
+- crunchyroll-content.js - Crunchyroll page cleanup, player layout, fullscreen shell preservation, and Back-button behavior
+- popup.html / popup.js / styles.css - compact extension settings popup
+- icons/ - Better Crunchyroll logo in orange and grayscale disabled variants
 
-**v2.11**
+## Load unpacked
+1. Open Chrome and go to chrome://extensions
+2. Enable Developer mode
+3. Click Load unpacked
+4. Select this Better Crunchyroll folder
 
-The current release focuses on the watch page and fullscreen player experience.
+## Version 0.2.12
+- Replaced the extension logo with the newly supplied Better Crunchyroll artwork.
+- Increased the visible logo size while preserving transparent edges.
+- Removed the browser-action ON/OFF badge; enabled/disabled state is communicated by the colored/grayscale extension icon.
+- Redesigned the popup around the logo, a centered enable/disable switch, and a simple version footer.
+- Removed the previous descriptive header, control-card title, and extra popup content.
+- Kept the popup compact so it does not leave unnecessary empty space.
+- Updated the popup, background service worker, and manifest to 0.2.12.
 
-### What it does
+## Version 0.2.11
+- Back-button initial lock reduced from 9 seconds to 6.5 seconds.
+- Back button's circular background is transparent by default.
+- Hover/focus adds a subtle circular background consistent with the player controls.
+- Back SVG remains unchanged.
 
-- Preserves the native Crunchyroll video-player skin in fullscreen.
-- Adds a compact Crunchyroll-style Back control.
-- Shows the Back control after the initial playback lock and hides it after inactivity.
-- Keeps the Back control's circular background transparent when idle, with a subtle circle appearing on hover/focus.
-- Shows the current episode title in the player controls.
-- Adds an episode-list control styled to fit the native player.
-- Keeps the native **Next Episode** control available.
-- Includes a simplified popup with an animated on/off toggle.
-- Uses the Better Crunchyroll extension artwork, including a grey disabled state.
-
-## Design Goals
-
-Better Crunchyroll is intentionally designed around a simple principle: **improve the experience without fighting the native Crunchyroll player**.
-
-The player additions are kept compact and visually consistent with the surrounding controls. Native Crunchyroll functionality is preferred whenever it is available instead of recreating the same behavior from scratch.
-
-## Version History
-
-The project has evolved through a series of small, focused iterations:
-
-| Version | Highlights |
-| --- | --- |
-| **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
-| **2.10** | Player control refinements, episode title/list controls, 9-second Back lock, sizing and hover polish. |
-| **2.9** | Episode title positioning and episode-list control polish. |
-| **2.8** | Stable rebuild of the episode-control implementation. |
-| **2.7** | Added episode title and episode-list functionality. |
-| **2.6** | Back-control positioning and timing refinements. |
-| **2.5** | Icon-only Back control, 6-second fade, larger extension icon. |
-| **2.4** | Crunchyroll Back SVG, icon states, native Next Episode preservation. |
-| **2.3** | Back-control auto-hide and simplified popup. |
-| **2.2** | Restored the native Crunchyroll player skin in fullscreen. |
-
-## Installation (Developer Mode)
-
-1. Download or clone the repository.
-2. Open `chrome://extensions` in Chrome.
-3. Enable **Developer mode**.
-4. Choose **Load unpacked**.
-5. Select the extension directory containing `manifest.json`.
-
-## Project Structure
-
-```text
-Better-Crunchyroll/
-├── manifest.json
-├── crunchyroll-content.js
-├── background.js
-├── popup.html
-├── popup.js
-├── styles.css
-├── icons/
-└── versions/
-```
-
-## Compatibility
-
-The extension targets `*.crunchyroll.com` and uses **Manifest V3**.
+## Version 0.2.10
+- Episode-list control is exactly 44x44 and uses the supplied white Crunchyroll SVG at 24x24, with no hover size change.
+- Episode title moved 3px downward to align more closely with the native bottom controls.
+- Back-button initial lock remains 9 seconds, but the countdown starts from the current video's play event rather than page/player discovery.
 
 ## Disclaimer
-
 Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
 
 Crunchyroll is a trademark of its respective owner. This project is intended as a personal/community enhancement and does not provide or redistribute Crunchyroll content.
