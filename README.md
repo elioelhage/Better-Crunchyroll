@@ -1,11 +1,12 @@
 # Better Crunchyroll
 
-**Version 0.2.12** refreshes the extension's visual identity with the newly supplied logo, a cleaner popup, and a color/grayscale icon state instead of an ON/OFF badge.
+**Version 0.2.13** improves video-loading reliability and moves Continue Watching directly below Trending in Canada on the Discover page.
 
 ## Files
 - manifest.json - extension metadata, permissions, icon registration, and content-script registration
 - background.js - service worker, enabled/disabled icon state, and version reporting
 - crunchyroll-content.js - Crunchyroll page cleanup, player layout, fullscreen shell preservation, and Back-button behavior
+- v213.js - v2.13 loading-overlay reliability and Discover-page Continue Watching placement
 - popup.html / popup.js / styles.css - compact extension settings popup
 - icons/ - Better Crunchyroll logo in orange and grayscale disabled variants
 
@@ -14,6 +15,13 @@
 2. Enable Developer mode
 3. Click Load unpacked
 4. Select this Better Crunchyroll folder
+
+## Version 0.2.13
+- Fixed a race condition where Better Crunchyroll's loading overlay could remain visible after the video had already become playable or started playing.
+- The loading overlay now listens for video readiness and playback events and removes itself when playback is actually available.
+- Added a safety check so the loading overlay cannot remain stuck indefinitely.
+- On the Crunchyroll Discover page, Continue Watching is moved directly below Trending in Canada.
+- No other Discover-page sections are intentionally reordered.
 
 ## Version 0.2.12
 - Replaced the extension logo with the newly supplied Better Crunchyroll artwork.
