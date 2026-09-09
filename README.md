@@ -4,7 +4,7 @@ An independent Chrome extension focused on improving the Crunchyroll web viewing
 
 ## Current Release
 
-**v2.10**
+**v2.11**
 
 The current release focuses on the watch page and fullscreen player experience.
 
@@ -12,7 +12,8 @@ The current release focuses on the watch page and fullscreen player experience.
 
 - Preserves the native Crunchyroll video-player skin in fullscreen.
 - Adds a compact Crunchyroll-style Back control.
-- Hides the Back control after inactivity and prevents it from appearing during the initial playback period.
+- Shows the Back control after the initial playback lock and hides it after inactivity.
+- Keeps the Back control's circular background transparent when idle, with a subtle circle appearing on hover/focus.
 - Shows the current episode title in the player controls.
 - Adds an episode-list control styled to fit the native player.
 - Keeps the native **Next Episode** control available.
@@ -31,7 +32,8 @@ The project has evolved through a series of small, focused iterations:
 
 | Version | Highlights |
 | --- | --- |
-| **2.10** | Current release. Player control refinements, episode title/list controls, 9-second Back lock, sizing and hover polish. |
+| **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
+| **2.10** | Player control refinements, episode title/list controls, 9-second Back lock, sizing and hover polish. |
 | **2.9** | Episode title positioning and episode-list control polish. |
 | **2.8** | Stable rebuild of the episode-control implementation. |
 | **2.7** | Added episode title and episode-list functionality. |
