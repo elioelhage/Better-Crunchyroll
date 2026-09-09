@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'betterCrunchyrollEnabled';
-const VERSION = '0.2.11';
+const VERSION = '0.2.12';
 
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('Better Crunchyroll installed.');
@@ -33,11 +33,6 @@ async function syncBadge() {
       48: enabled ? 'icons/icon48.png' : 'icons/icon48-off.png',
       128: enabled ? 'icons/icon128.png' : 'icons/icon128-off.png',
     },
-  });
-
-  await chrome.action.setBadgeText({ text: enabled ? 'ON' : 'OFF' });
-  await chrome.action.setBadgeBackgroundColor({
-    color: enabled ? '#ff7300' : '#4b5563',
   });
 }
 
