@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Better Crunchyroll</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <div>
+          <h1>Better Crunchyroll</h1>
+          <p>Cleaner watching, less clutter.</p>
+        </div>
+        <span class="version" id="versionText">v2.6</span>
+      </header>
+
+      <section class="control-card" aria-label="Extension controls">
+        <div class="control-card__title">Extension</div>
+        <button
+          id="toggleButton"
+          class="switch"
+          type="button"
+          role="switch"
+          aria-checked="true"
+          aria-label="Toggle Better Crunchyroll"
+        >
+          <span class="switch__thumb" aria-hidden="true"></span>
+        </button>
+      </section>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
