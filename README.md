@@ -6,6 +6,4 @@ A Chrome extension that improves the Crunchyroll web viewing experience.
 
 **v2.10**
 
-## Prior versions
-
-Earlier development builds are preserved under `versions/` for reference.
+The complete v2.10 source is the current root release. Prior development milestones from v2.3 through v2.9 are preserved under `versions/`.
