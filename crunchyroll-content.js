@@ -183,6 +183,7 @@
         opacity: 1;
       }
 
+
       [data-testid="bottom-controls-autohide"] {
         position: relative !important;
       }
@@ -226,6 +227,7 @@
         cursor: pointer;
         opacity: 0.75;
         transition: opacity 200ms linear, background 160ms ease, transform 120ms ease;
+        box-sizing: border-box;
         box-sizing: border-box;
       }
 
@@ -313,6 +315,8 @@
       return;
     }
 
+    // The Back button stays unavailable until the current video has actually
+    // started playback, then remains blocked for the full initial delay.
     const remaining = state.backAvailableAt > 0
       ? state.backAvailableAt - performance.now()
       : Infinity;
@@ -360,6 +364,7 @@
     }
 
     if (state.backVideoPlayHandler) {
+      // Listener is already attached to this exact video.
       if (!video.paused && !video.ended) {
         armBackButtonTimer(video);
       }
@@ -370,329 +375,465 @@
     state.backVideoPlayHandler = onPlay;
     video.addEventListener('play', onPlay, { passive: true });
 
+    // A video may already be playing by the time the extension discovers it.
     if (!video.paused && !video.ended) {
       armBackButtonTimer(video);
     }
   }
 
-  function cleanupBackButtonVideoTimer() {
+  function installBackButtonActivity(shell) {
+    if (!shell) {
+      return;
+    }
+
+    if (state.activityHandlersInstalled && state.playerShell === shell) {
+      showBackButton();
+      return;
+    }
+
+    uninstallBackButtonActivity();
+
+    const reveal = () => showBackButton();
+    state.playerShell = shell;
+    state.activityRevealHandler = reveal;
+    state.activityHandlersInstalled = true;
+
+    // Match the player's natural interaction model: moving/interacting with
+    // the player immediately reveals the custom Back button and restarts its
+    // inactivity countdown. Keyboard activity is also treated as interaction.
+    shell.addEventListener('pointermove', reveal, { passive: true });
+    shell.addEventListener('pointerdown', reveal, { passive: true });
+    shell.addEventListener('touchstart', reveal, { passive: true });
+    document.addEventListener('keydown', reveal, { passive: true });
+    showBackButton();
+  }
+
+  function uninstallBackButtonActivity() {
+    clearBackHideTimer();
+    clearBackInitialTimer();
+
+    if (state.playerShell && state.activityRevealHandler) {
+      state.playerShell.removeEventListener('pointermove', state.activityRevealHandler);
+      state.playerShell.removeEventListener('pointerdown', state.activityRevealHandler);
+      state.playerShell.removeEventListener('touchstart', state.activityRevealHandler);
+    }
+
+    if (state.activityRevealHandler) {
+      document.removeEventListener('keydown', state.activityRevealHandler);
+    }
+
     if (state.playerVideo && state.backVideoPlayHandler) {
       state.playerVideo.removeEventListener('play', state.backVideoPlayHandler);
     }
 
-    state.backVideoPlayHandler = null;
+    state.playerShell = null;
     state.playerVideo = null;
-    state.backTimerStartedForVideo = null;
     state.backAvailableAt = 0;
-    clearBackInitialTimer();
-    clearBackHideTimer();
-  }
-
-  function ensureBackButton() {
-    let button = document.getElementById(BACK_BUTTON_ID);
-    if (button) {
-      return button;
-    }
-
-    button = document.createElement('button');
-    button.id = BACK_BUTTON_ID;
-    button.type = 'button';
-    button.setAttribute('aria-label', 'Back');
-
-    const icon = document.createElement('img');
-    icon.className = 'back-icon';
-    icon.alt = '';
-    icon.src = chrome.runtime.getURL('icons/back-button.svg');
-    button.appendChild(icon);
-
-    button.addEventListener('click', () => {
-      if (state.backAvailableAt > performance.now()) {
-        return;
-      }
-      history.pushState({}, '', '/discover');
-      window.dispatchEvent(new Event('popstate'));
-    });
-
-    document.body.appendChild(button);
-    return button;
-  }
-
-  function findPlayerShell() {
-    return document.querySelector('[data-testid="player-container"]')
-      || document.querySelector('#player-container')
-      || document.querySelector('.video-player');
-  }
-
-  function findPlayerVideo(playerShell) {
-    return playerShell?.querySelector('video') || document.querySelector('video');
-  }
-
-  function setPlayerRoot(playerShell) {
-    if (!playerShell) {
-      return;
-    }
-
-    if (state.playerShell && state.playerShell !== playerShell) {
-      state.playerShell.removeAttribute(ROOT_ATTR);
-    }
-
-    playerShell.setAttribute(ROOT_ATTR, 'true');
-    state.playerShell = playerShell;
-  }
-
-  function hidePageChrome() {
-    const selectors = [
-      'header.erc-large-header',
-      'nav.header-nav',
-      '[data-testid="header"]',
-      '.app-layout__header--ywueY',
-    ];
-
-    selectors.forEach((selector) => {
-      document.querySelectorAll(selector).forEach((el) => {
-        if (!el.closest(`[${ROOT_ATTR}="true"]`)) {
-          el.setAttribute(HIDDEN_ATTR, 'true');
-        }
-      });
-    });
-  }
-
-  function restorePageChrome() {
-    document.querySelectorAll(`[${HIDDEN_ATTR}="true"]`).forEach((el) => {
-      el.removeAttribute(HIDDEN_ATTR);
-    });
-  }
-
-  function getEpisodeTitle() {
-    const meta = document.querySelector('meta[property="og:title"]')?.getAttribute('content');
-    if (meta) {
-      const withoutShow = meta.replace(/\s*\|\s*E\d+\s*-\s*/i, ' — ');
-      const parts = withoutShow.split(' — ');
-      return parts.length > 1 ? parts.slice(1).join(' — ').trim() : withoutShow.trim();
-    }
-
-    const jsonLd = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
-      .map((node) => {
-        try { return JSON.parse(node.textContent || ''); } catch { return null; }
-      })
-      .find((data) => data && data['@type'] === 'TVEpisode');
-
-    return jsonLd?.name?.replace(/^.*?\|\s*E\d+\s*-\s*/i, '').trim() || document.title.replace(/\s+-\s+Watch on Crunchyroll.*$/i, '').trim();
-  }
-
-  function ensureEpisodeTitle(container) {
-    let title = container.querySelector(`#${EPISODE_TITLE_ID}`);
-    if (!title) {
-      title = document.createElement('div');
-      title.id = EPISODE_TITLE_ID;
-      title.setAttribute('aria-hidden', 'true');
-      container.appendChild(title);
-    }
-
-    title.textContent = getEpisodeTitle();
-  }
-
-  function findEpisodeListHost() {
-    return document.querySelector('[data-testid="bottom-right-controls-stack"]')
-      || document.querySelector('[data-testid="bottom-controls-autohide"]')?.querySelector('[data-testid="bottom-right-controls-stack"]')
-      || null;
-  }
-
-  function ensureEpisodeListButton() {
-    const host = findEpisodeListHost();
-    if (!host || host.querySelector(`#${EPISODE_LIST_BUTTON_ID}`)) {
-      return;
-    }
-
-    const button = document.createElement('button');
-    button.id = EPISODE_LIST_BUTTON_ID;
-    button.type = 'button';
-    button.setAttribute('aria-label', 'More Episodes');
-    button.title = 'More Episodes';
-
-    const img = document.createElement('img');
-    img.className = 'better-crunchyroll-episode-list-icon';
-    img.alt = '';
-    img.src = chrome.runtime.getURL('icons/episodes.svg');
-    button.appendChild(img);
-
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const native = document.querySelector('[data-t="see-more-episodes-btn"]')
-        || document.querySelector('[data-testid="see-more-episodes-btn"]');
-      if (native instanceof HTMLElement) {
-        native.click();
-      }
-    });
-
-    host.appendChild(button);
-  }
-
-  function installActivityReveal() {
-    if (state.activityHandlersInstalled) {
-      return;
-    }
-
-    const handler = () => {
-      showBackButton();
-    };
-
-    state.activityRevealHandler = handler;
-    ['mousemove', 'pointermove', 'touchstart', 'keydown', 'wheel'].forEach((eventName) => {
-      document.addEventListener(eventName, handler, { passive: true });
-    });
-    state.activityHandlersInstalled = true;
-  }
-
-  function removeActivityReveal() {
-    if (!state.activityHandlersInstalled || !state.activityRevealHandler) {
-      return;
-    }
-
-    ['mousemove', 'pointermove', 'touchstart', 'keydown', 'wheel'].forEach((eventName) => {
-      document.removeEventListener(eventName, state.activityRevealHandler);
-    });
-
+    state.backTimerStartedForVideo = null;
+    state.backVideoPlayHandler = null;
     state.activityRevealHandler = null;
     state.activityHandlersInstalled = false;
   }
 
-  function processPlayer() {
-    if (!isWatchPage()) {
-      return false;
-    }
+  function ensureBackButton(shell) {
+    const video = shell?.querySelector?.('video') || document.querySelector('video');
+    const isNewVideo = state.playerShell !== shell || state.playerVideo !== video;
 
-    const playerShell = findPlayerShell();
-    const video = findPlayerVideo(playerShell);
-
-    if (!playerShell || !video) {
-      return false;
-    }
-
-    ensureStyle();
-    ensureBackButton();
-    setPlayerRoot(playerShell);
-    hidePageChrome();
-
-    if (state.playerVideo !== video) {
+    if (isNewVideo) {
       if (state.playerVideo && state.backVideoPlayHandler) {
         state.playerVideo.removeEventListener('play', state.backVideoPlayHandler);
       }
-      state.playerVideo = video;
       state.backVideoPlayHandler = null;
-      state.backTimerStartedForVideo = null;
       state.backAvailableAt = 0;
-      installBackButtonVideoTimer(video);
-    } else {
-      installBackButtonVideoTimer(video);
+      state.backTimerStartedForVideo = null;
+      clearBackInitialTimer();
+      clearBackHideTimer();
     }
 
-    installActivityReveal();
+    let button = document.getElementById(BACK_BUTTON_ID);
 
-    const controls = document.querySelector('[data-testid="bottom-controls-autohide"]');
-    if (controls) {
-      ensureEpisodeTitle(controls);
-      ensureEpisodeListButton();
+    if (!button) {
+      button = document.createElement('button');
+      button.id = BACK_BUTTON_ID;
+      button.type = 'button';
+      button.setAttribute('aria-label', 'Back to Crunchyroll home');
+      button.innerHTML = `
+        <img class="back-icon" src="${chrome.runtime.getURL('icons/back-button.svg')}" alt="" aria-hidden="true">
+      `;
+      button.addEventListener('click', () => {
+        window.location.href = 'https://www.crunchyroll.com/';
+      });
+      document.documentElement.appendChild(button);
     }
 
-    removeOverlay();
-    return true;
+    state.playerVideo = video;
+    installBackButtonVideoTimer(video);
+    installBackButtonActivity(shell);
+    showBackButton();
   }
 
-  function resetExtension() {
-    clearBackInitialTimer();
-    clearBackHideTimer();
-    cleanupBackButtonVideoTimer();
-    removeActivityReveal();
+  function removeBackButton() {
+    uninstallBackButtonActivity();
     document.getElementById(BACK_BUTTON_ID)?.remove();
-    document.getElementById(EPISODE_TITLE_ID)?.remove();
-    document.getElementById(EPISODE_LIST_BUTTON_ID)?.remove();
-    if (state.playerShell) {
-      state.playerShell.removeAttribute(ROOT_ATTR);
-    }
-    state.playerShell = null;
-    restorePageChrome();
-    removeStyle();
-    removeOverlay();
   }
 
-  function apply() {
-    if (!state.enabled || !isWatchPage()) {
-      resetExtension();
+  function clearMarkers() {
+    document.querySelectorAll(`[${ROOT_ATTR}="true"]`).forEach((element) => {
+      element.removeAttribute(ROOT_ATTR);
+    });
+
+    document.querySelectorAll(`[${HIDDEN_ATTR}="true"]`).forEach((element) => {
+      element.removeAttribute(HIDDEN_ATTR);
+    });
+  }
+
+  function getEpisodeTitle() {
+    const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content')?.trim();
+    if (ogTitle) {
+      const separator = ogTitle.indexOf(' | ');
+      return separator >= 0 ? ogTitle.slice(separator + 3).trim() : ogTitle;
+    }
+
+    const title = document.title.replace(/\s*-\s*Watch on Crunchyroll\s*$/i, '').trim();
+    return title || 'Crunchyroll';
+  }
+
+  function findEpisodeListTrigger() {
+    return document.querySelector('[data-t="see-more-episodes-btn"]')
+      || document.querySelector('button.see-all-button')
+      || null;
+  }
+
+  function openEpisodeList() {
+    const trigger = findEpisodeListTrigger();
+    if (!trigger) {
       return;
     }
 
-    if (state.applying) {
-      return;
+    const wasHidden = trigger.getAttribute(HIDDEN_ATTR) === 'true';
+    if (wasHidden) {
+      trigger.removeAttribute(HIDDEN_ATTR);
     }
 
-    state.applying = true;
     try {
-      if (!processPlayer()) {
-        ensureStyle();
-        ensureOverlay();
-      }
+      trigger.click();
     } finally {
-      state.applying = false;
+      if (wasHidden) {
+        window.setTimeout(() => trigger.setAttribute(HIDDEN_ATTR, 'true'), 0);
+      }
+    }
+  }
+
+  function ensureEpisodeControls() {
+    const autoHide = document.querySelector('[data-testid="bottom-controls-autohide"]');
+    if (!autoHide) {
+      return;
+    }
+
+    let title = autoHide.querySelector(`#${EPISODE_TITLE_ID}`);
+    const episodeTitle = getEpisodeTitle();
+    if (!title) {
+      title = document.createElement('div');
+      title.id = EPISODE_TITLE_ID;
+      title.className = 'better-crunchyroll-episode-title';
+      title.setAttribute('aria-hidden', 'true');
+      autoHide.appendChild(title);
+    }
+    if (title.textContent !== episodeTitle) {
+      title.textContent = episodeTitle;
+    }
+
+    const rightStack = autoHide.querySelector('[data-testid="bottom-right-controls-stack"]');
+    if (!rightStack) {
+      return;
+    }
+
+    let button = rightStack.querySelector(`#${EPISODE_LIST_BUTTON_ID}`);
+    if (!button) {
+      button = document.createElement('button');
+      button.id = EPISODE_LIST_BUTTON_ID;
+      button.type = 'button';
+      button.setAttribute('aria-label', 'Episodes');
+      button.title = 'Episodes';
+      button.className = 'better-crunchyroll-episode-list-button';
+      button.innerHTML = `
+        <img class="better-crunchyroll-episode-list-icon" src="${chrome.runtime.getURL('icons/episodes.svg')}" alt="" aria-hidden="true">
+      `;
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openEpisodeList();
+      });
+    }
+
+    const nextEpisode = rightStack.querySelector('[data-testid="next-episode-button"]');
+    const nextWrapper = nextEpisode?.parentElement;
+
+    if (nextWrapper && nextWrapper.parentElement === rightStack) {
+      if (button.parentElement !== rightStack || nextWrapper.nextElementSibling !== button) {
+        nextWrapper.insertAdjacentElement('afterend', button);
+      }
+    } else if (button.parentElement !== rightStack) {
+      rightStack.appendChild(button);
+    }
+  }
+
+  function manageEpisodeControls() {
+    // Keep Next Episode available in Crunchyroll's native player skin.
+    // Older builds hid it along with the surrounding episode controls, which
+    // made the native next-episode action disappear from fullscreen.
+    const nextSelectors = [
+      'button[aria-label="Next Episode"]',
+      'a[aria-label="Next Episode"]',
+      'button[title="Next Episode"]',
+      'a[title="Next Episode"]',
+      'button[data-testid="next-episode"]',
+      'a[data-testid="next-episode"]',
+    ];
+
+    for (const selector of nextSelectors) {
+      for (const element of document.querySelectorAll(selector)) {
+        element.removeAttribute(HIDDEN_ATTR);
+      }
+    }
+
+    // The previous-episode action is still intentionally omitted from the
+    // simplified fullscreen experience. Do not touch unrelated player UI.
+    const previousSelectors = [
+      'button[aria-label="Previous Episode"]',
+      'a[aria-label="Previous Episode"]',
+      'button[title="Previous Episode"]',
+      'a[title="Previous Episode"]',
+      'button[data-testid="previous-episode"]',
+      'a[data-testid="previous-episode"]',
+    ];
+
+    for (const selector of previousSelectors) {
+      for (const element of document.querySelectorAll(selector)) {
+        element.setAttribute(HIDDEN_ATTR, 'true');
+      }
+    }
+  }
+
+  function locatePlayerShell() {
+    const video = document.querySelector('video');
+    if (!video) {
+      return null;
+    }
+
+    // Crunchyroll renders the visible player controls as a sibling overlay
+    // of the Bitmovin video container inside #player-container. Fullscreening
+    // only the video container leaves that control layer outside the fullscreen
+    // surface, which makes the entire player skin appear to disappear.
+    const playerContainer = document.querySelector('#player-container');
+    if (playerContainer?.contains(video)) {
+      return playerContainer;
+    }
+
+    const labeledPlayer = document.querySelector('[aria-label="Video Player"]');
+    if (labeledPlayer?.contains(video)) {
+      return labeledPlayer;
+    }
+
+    const controlRoot = document.querySelector('[data-testid="player-controls-root"]');
+    if (controlRoot) {
+      let controlShell = controlRoot.parentElement;
+      while (controlShell && controlShell !== document.body) {
+        if (controlShell.contains(video)) {
+          return controlShell;
+        }
+        controlShell = controlShell.parentElement;
+      }
+    }
+
+    let fallback = video.parentElement;
+    let current = video.parentElement;
+
+    while (current && current !== document.body) {
+      const label = [
+        current.id,
+        current.className,
+        current.getAttribute('data-testid'),
+        current.getAttribute('aria-label'),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      if (label.includes('player') || label.includes('video') || label.includes('watch')) {
+        return current;
+      }
+
+      const rect = current.getBoundingClientRect();
+      if (!fallback && rect.width >= 320 && rect.height >= 180) {
+        fallback = current;
+      }
+
+      current = current.parentElement;
+    }
+
+    return fallback;
+  }
+
+  function hideAncestorChrome(shell) {
+    const selectors = [
+      'header',
+      'nav',
+      'aside',
+      '[role="navigation"]',
+      '[aria-label*="recommend" i]',
+      '[aria-label*="description" i]',
+      '[aria-label*="details" i]',
+      '[data-testid*="recommend" i]',
+      '[data-testid*="description" i]',
+      '[data-testid*="details" i]',
+      '[class*="recommend" i]',
+      '[class*="description" i]',
+      '[class*="details" i]',
+      '[class*="metadata" i]',
+      '[class*="episode" i]',
+    ];
+
+    for (const selector of selectors) {
+      for (const element of document.querySelectorAll(selector)) {
+        if (!element.contains(shell) && !shell.contains(element)) {
+          element.setAttribute(HIDDEN_ATTR, 'true');
+        }
+      }
     }
   }
 
   function startObserver() {
     if (state.observer) {
-      state.observer.disconnect();
+      return;
     }
 
     state.observer = new MutationObserver(() => {
-      if (!state.applying) {
-        apply();
+      if (state.applying) {
+        return;
       }
+
+      if (!state.enabled || !isWatchPage()) {
+        cleanup();
+        return;
+      }
+
+      if (!state.applied || !document.querySelector(`[${ROOT_ATTR}="true"]`)) {
+        applyWatchMode();
+        return;
+      }
+
+      manageEpisodeControls();
+      ensureEpisodeControls();
+      const shell = locatePlayerShell();
+      if (shell) {
+        ensureBackButton(shell);
+      }
+      removeOverlay();
     });
 
     state.observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
-      attributes: true,
-      attributeFilter: ['class', 'style', 'data-testid'],
     });
   }
 
-  function startRouteWatcher() {
-    if (state.routeTimer) {
-      window.clearInterval(state.routeTimer);
-    }
-
-    state.routeTimer = window.setInterval(() => {
-      if (location.href !== state.lastHref) {
-        state.lastHref = location.href;
-        resetExtension();
-        apply();
-      }
-    }, 500);
+  function stopObserver() {
+    state.observer?.disconnect();
+    state.observer = null;
   }
 
-  async function loadEnabledState() {
-    const stored = await chrome.storage.local.get({ [STORAGE_KEY]: true });
-    state.enabled = stored[STORAGE_KEY] !== false;
-    apply();
-  }
-
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'local' || !changes[STORAGE_KEY]) {
+  function applyWatchMode() {
+    if (state.applying) {
       return;
     }
 
-    state.enabled = changes[STORAGE_KEY].newValue !== false;
-    apply();
-  });
+    if (state.applied && document.querySelector(`[${ROOT_ATTR}="true"]`)) {
+      manageEpisodeControls();
+      ensureEpisodeControls();
+      removeOverlay();
+      startObserver();
+      return;
+    }
 
-  window.addEventListener('better-crunchyroll-locationchange', () => {
+    state.applying = true;
+
+    try {
+      ensureStyle();
+      ensureOverlay();
+
+      const shell = locatePlayerShell();
+      if (!shell) {
+        state.applied = false;
+        startObserver();
+        return;
+      }
+
+      shell.setAttribute(ROOT_ATTR, 'true');
+      hideAncestorChrome(shell);
+      manageEpisodeControls();
+      ensureEpisodeControls();
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          removeOverlay();
+          ensureBackButton(shell);
+        });
+      });
+      state.applied = true;
+      startObserver();
+    } finally {
+      state.applying = false;
+    }
+  }
+
+  function cleanup() {
+    state.applied = false;
+    state.applying = false;
+    stopObserver();
+    removeStyle();
+    removeOverlay();
+    removeBackButton();
+    clearMarkers();
+  }
+
+  function refresh() {
+    if (!state.enabled || !isWatchPage()) {
+      cleanup();
+      return;
+    }
+
+    applyWatchMode();
+  }
+
+  function syncRoute() {
+    if (location.href === state.lastHref) {
+      return;
+    }
+
     state.lastHref = location.href;
-    resetExtension();
-    apply();
+    refresh();
+  }
+
+  function installRoutePolling() {
+    if (state.routeTimer) {
+      return;
+    }
+
+    state.routeTimer = window.setInterval(syncRoute, 250);
+  }
+
+  chrome.storage.local.get({ [STORAGE_KEY]: true }, (result) => {
+    state.enabled = result[STORAGE_KEY] !== false;
+    refresh();
   });
 
-  startObserver();
-  startRouteWatcher();
-  loadEnabledState();
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'local' && changes[STORAGE_KEY]) {
+      state.enabled = changes[STORAGE_KEY].newValue !== false;
+      refresh();
+    }
+  });
+
+  window.addEventListener('better-crunchyroll-locationchange', refresh);
+  installRoutePolling();
 })();
