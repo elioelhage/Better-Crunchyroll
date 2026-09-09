@@ -7,28 +7,21 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="popup">
+    <main class="popup" aria-label="Better Crunchyroll settings">
       <header class="popup__header">
-        <div>
-          <h1>Better Crunchyroll</h1>
-          <p>Cleaner watching, less clutter.</p>
-        </div>
-        <span class="version" id="versionText">v2.6</span>
+        <img class="popup__logo" src="icons/icon128.png" alt="Better Crunchyroll" />
       </header>
 
-      <section class="control-card" aria-label="Extension controls">
-        <div class="control-card__title">Extension</div>
-        <button
-          id="toggleButton"
-          class="switch"
-          type="button"
-          role="switch"
-          aria-checked="true"
-          aria-label="Toggle Better Crunchyroll"
-        >
+      <section class="control" aria-label="Extension controls">
+        <button id="toggleButton" class="switch" type="button" role="switch" aria-checked="true" aria-label="Toggle Better Crunchyroll">
           <span class="switch__thumb" aria-hidden="true"></span>
         </button>
+        <span class="control__label" id="toggleLabel">Enabled</span>
       </section>
+
+      <footer class="popup__footer">
+        <span id="versionText">v2.12</span>
+      </footer>
     </main>
     <script src="popup.js"></script>
   </body>
