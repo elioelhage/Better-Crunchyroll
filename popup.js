@@ -3,7 +3,6 @@ const VERSION = '0.2.12';
 
 const popupElement = document.querySelector('.popup');
 const toggleButton = document.getElementById('toggleButton');
-const toggleLabel = document.getElementById('toggleLabel');
 const versionText = document.getElementById('versionText');
 
 function render(enabled) {
@@ -15,7 +14,6 @@ function render(enabled) {
     'aria-label',
     isEnabled ? 'Disable Better Crunchyroll' : 'Enable Better Crunchyroll',
   );
-  toggleLabel.textContent = isEnabled ? 'Enabled' : 'Disabled';
   versionText.textContent = `v${VERSION.replace(/^v/i, '')}`;
 }
 
