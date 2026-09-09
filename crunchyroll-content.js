@@ -7,7 +7,7 @@
   const HIDDEN_ATTR = 'data-better-crunchyroll-hidden';
   const WATCH_ROUTE = /^\/watch(\/|$)/i;
   const BACK_HIDE_DELAY = 6000;
-  const BACK_INITIAL_DELAY = 9000;
+  const BACK_INITIAL_DELAY = 6500;
   const BACK_VISIBLE_CLASS = 'better-crunchyroll-back-visible';
   const EPISODE_TITLE_ID = 'better-crunchyroll-episode-title';
   const EPISODE_LIST_BUTTON_ID = 'better-crunchyroll-episode-list';
@@ -137,14 +137,14 @@
         width: 44px;
         height: 44px;
         padding: 0;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid transparent;
         border-radius: 999px;
-        background: rgba(17, 19, 24, 0.78);
+        background: transparent;
         color: rgba(255, 255, 255, 0.94);
         cursor: pointer;
-        backdrop-filter: blur(16px) saturate(120%);
-        -webkit-backdrop-filter: blur(16px) saturate(120%);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
         opacity: 0.75;
         visibility: hidden;
         pointer-events: none;
@@ -153,7 +153,9 @@
           opacity 200ms linear,
           transform 220ms ease,
           visibility 0s linear 220ms,
-          background 160ms ease;
+          background 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease;
       }
 
       #${BACK_BUTTON_ID}.${BACK_VISIBLE_CLASS} {
@@ -168,6 +170,8 @@
       #${BACK_BUTTON_ID}:focus-visible {
         opacity: 1;
         background: #3f3f46;
+        border-color: transparent;
+        box-shadow: none;
       }
 
       #${BACK_BUTTON_ID} .back-icon {
@@ -178,7 +182,6 @@
         filter: brightness(0) invert(1);
         opacity: 1;
       }
-
 
       [data-testid="bottom-controls-autohide"] {
         position: relative !important;
@@ -223,7 +226,6 @@
         cursor: pointer;
         opacity: 0.75;
         transition: opacity 200ms linear, background 160ms ease, transform 120ms ease;
-        box-sizing: border-box;
         box-sizing: border-box;
       }
 
@@ -311,8 +313,6 @@
       return;
     }
 
-    // The Back button stays unavailable until the current video has actually
-    // started playback, then remains blocked for the full initial delay.
     const remaining = state.backAvailableAt > 0
       ? state.backAvailableAt - performance.now()
       : Infinity;
@@ -360,7 +360,6 @@
     }
 
     if (state.backVideoPlayHandler) {
-      // Listener is already attached to this exact video.
       if (!video.paused && !video.ended) {
         armBackButtonTimer(video);
       }
@@ -371,7 +370,6 @@
     state.backVideoPlayHandler = onPlay;
     video.addEventListener('play', onPlay, { passive: true });
 
-    // A video may already be playing by the time the listener is installed.
     if (!video.paused && !video.ended) {
       armBackButtonTimer(video);
     }
