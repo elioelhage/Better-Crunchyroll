@@ -28,9 +28,9 @@ async function syncBadge() {
 
   await chrome.action.setIcon({
     path: {
-      16: enabled ? 'icons/icon16.png' : 'icons/icon16-off.png',
-      32: enabled ? 'icons/icon32.png' : 'icons/icon32-off.png',
-      48: enabled ? 'icons/icon48.png' : 'icons/icon48-off.png',
+      16: enabled ? 'icons/icon128.png' : 'icons/icon128-off.png',
+      32: enabled ? 'icons/icon128.png' : 'icons/icon128-off.png',
+      48: enabled ? 'icons/icon128.png' : 'icons/icon128-off.png',
       128: enabled ? 'icons/icon128.png' : 'icons/icon128-off.png',
     },
   });
