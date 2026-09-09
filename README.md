@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.14** is a corrective update focused on the Discover page and watch-page polish.
+**Version 0.2.15** refines the watch-page episode controls and episode-list layout.
 
 ## What it does
 - Preserves the native Crunchyroll player skin in fullscreen.
@@ -10,11 +10,14 @@
 - Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
 - Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
 - Includes a compact popup with the extension logo, enable/disable switch, and version footer.
+- Converts the episode list to a vertical list with smaller side thumbnails, earliest-to-latest ordering, watched-state fading, and automatic positioning on the current episode.
+- Fine-tunes the centered episode title by moving it 3px downward and shifts the episode-list SVG slightly left for optical alignment.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
-| **2.14** | Corrected Discover feed reordering and restored transparent idle Back-button circle. | 
+| **2.15** | Vertical episode list with side thumbnails, current-episode positioning, watched-state fading, and small player-control alignment tweaks. |
+| **2.14** | Corrected Discover feed reordering and restored transparent idle Back-button circle. |
 | **2.13** | Initial attempt at video-loading protection and Discover-page Continue Watching reordering. |
 | **2.12** | New extension logo, larger popup logo, grayscale/color icon states, and simplified popup. |
 | **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
@@ -44,6 +47,8 @@ Better-Crunchyroll/
 ├── popup.html
 ├── popup.js
 ├── styles.css
+├── v213.js
+├── v215.js
 ├── icons/
 └── versions/
 ```
