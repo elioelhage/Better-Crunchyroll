@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Better Crunchyroll",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Improves the Crunchyroll watch experience with a persistent control panel, cleaner watch-page layout, and a streamlined Discover page.",
   "action": {
     "default_popup": "popup.html",
