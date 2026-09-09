@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'betterCrunchyrollEnabled';
-const VERSION = '0.2.12';
+const VERSION = '0.2.13';
 
 const popupElement = document.querySelector('.popup');
 const toggleButton = document.getElementById('toggleButton');
