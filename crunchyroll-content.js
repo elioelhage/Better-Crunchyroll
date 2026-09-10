@@ -127,7 +127,7 @@
       }
 
       #${BACK_BUTTON_ID} {
-        position: fixed;
+        position: absolute;
         top: 18px;
         left: 18px;
         z-index: 2147483647;
@@ -183,7 +183,6 @@
         opacity: 1;
       }
 
-
       [data-testid="bottom-controls-autohide"] {
         position: relative !important;
       }
@@ -227,7 +226,6 @@
         cursor: pointer;
         opacity: 0.75;
         transition: opacity 200ms linear, background 160ms ease, transform 120ms ease;
-        box-sizing: border-box;
         box-sizing: border-box;
       }
 
@@ -315,8 +313,6 @@
       return;
     }
 
-    // The Back button stays unavailable until the current video has actually
-    // started playback, then remains blocked for the full initial delay.
     const remaining = state.backAvailableAt > 0
       ? state.backAvailableAt - performance.now()
       : Infinity;
@@ -364,7 +360,6 @@
     }
 
     if (state.backVideoPlayHandler) {
-      // Listener is already attached to this exact video.
       if (!video.paused && !video.ended) {
         armBackButtonTimer(video);
       }
@@ -375,7 +370,6 @@
     state.backVideoPlayHandler = onPlay;
     video.addEventListener('play', onPlay, { passive: true });
 
-    // A video may already be playing by the time the extension discovers it.
     if (!video.paused && !video.ended) {
       armBackButtonTimer(video);
     }
@@ -398,9 +392,6 @@
     state.activityRevealHandler = reveal;
     state.activityHandlersInstalled = true;
 
-    // Match the player's natural interaction model: moving/interacting with
-    // the player immediately reveals the custom Back button and restarts its
-    // inactivity countdown. Keyboard activity is also treated as interaction.
     shell.addEventListener('pointermove', reveal, { passive: true });
     shell.addEventListener('pointerdown', reveal, { passive: true });
     shell.addEventListener('touchstart', reveal, { passive: true });
@@ -467,6 +458,13 @@
     }
 
     state.playerVideo = video;
+
+    // Keep the custom Back button inside the player shell so it remains part
+    // of the fullscreen surface instead of disappearing with document chrome.
+    if (shell && button.parentElement !== shell) {
+      shell.appendChild(button);
+    }
+
     installBackButtonVideoTimer(video);
     installBackButtonActivity(shell);
     showBackButton();
@@ -579,9 +577,6 @@
   }
 
   function manageEpisodeControls() {
-    // Keep Next Episode available in Crunchyroll's native player skin.
-    // Older builds hid it along with the surrounding episode controls, which
-    // made the native next-episode action disappear from fullscreen.
     const nextSelectors = [
       'button[aria-label="Next Episode"]',
       'a[aria-label="Next Episode"]',
@@ -597,8 +592,6 @@
       }
     }
 
-    // The previous-episode action is still intentionally omitted from the
-    // simplified fullscreen experience. Do not touch unrelated player UI.
     const previousSelectors = [
       'button[aria-label="Previous Episode"]',
       'a[aria-label="Previous Episode"]',
@@ -621,10 +614,6 @@
       return null;
     }
 
-    // Crunchyroll renders the visible player controls as a sibling overlay
-    // of the Bitmovin video container inside #player-container. Fullscreening
-    // only the video container leaves that control layer outside the fullscreen
-    // surface, which makes the entire player skin appear to disappear.
     const playerContainer = document.querySelector('#player-container');
     if (playerContainer?.contains(video)) {
       return playerContainer;
@@ -835,5 +824,12 @@
   });
 
   window.addEventListener('better-crunchyroll-locationchange', refresh);
+  document.addEventListener('fullscreenchange', () => {
+    if (!state.enabled || !isWatchPage()) return;
+    const shell = locatePlayerShell();
+    if (shell) {
+      ensureBackButton(shell);
+    }
+  });
   installRoutePolling();
 })();
