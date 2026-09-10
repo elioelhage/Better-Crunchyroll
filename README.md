@@ -7,7 +7,7 @@ It keeps Crunchyroll's existing service and player, then adds quality-of-life im
 ## Features
 
 ### Better playback experience
-- Custom in-player **episode title** with responsive typography and positioning.
+- Custom in-player **episode title** styled to feel closer to Crunchyroll's native typography, with responsive sizing and optical positioning inside the bottom player control bar.
 - A compact **Back** control designed to stay available in the fullscreen player.
 - Dedicated **episode-list** control integrated into the player controls.
 - Cleaner fullscreen presentation while preserving the native Crunchyroll video player.
@@ -83,19 +83,13 @@ Better-Crunchyroll/
 
 Better Crunchyroll avoids reimplementing the Crunchyroll service itself. The extension works as an enhancement layer over the existing site and player, with individual features kept as isolated modules where practical so that new changes do not unnecessarily disturb established functionality.
 
-## Disclaimer
-
-Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
-
-Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
-
 ---
 
 # Version History
 
 | Version | Highlights |
 | --- | --- |
-| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning vertically centered within the bottom player control bar while keeping it centered between the surrounding controls. Existing v2.36 behavior remains intact. |
+| **2.37** | Refined the in-player episode title with more native-looking typography and a 3px optical lift while keeping it centered inside the bottom player control bar. Existing v2.36 behavior remains intact. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
@@ -117,3 +111,9 @@ Crunchyroll is a trademark of its respective owner. This project does not provid
 | **2.12** | New extension logo, larger popup logo, grayscale/color icon states, and simplified popup. |
 | **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
 | **2.10** | Episode-list control and episode-title/player-control refinements. |
+
+## Disclaimer
+
+Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
+
+Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
