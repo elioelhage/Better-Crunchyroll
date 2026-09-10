@@ -1,5 +1,5 @@
 const STORAGE_KEY='betterCrunchyrollEnabled';
-const VERSION='0.2.23';
+const VERSION='0.2.24';
 const KEYS={shortcuts:'betterCrunchyrollShortcuts',autoSkipIntro:'betterCrunchyrollAutoSkipIntro',autoSkipRecap:'betterCrunchyrollAutoSkipRecap',autoSkipCredits:'betterCrunchyrollAutoSkipCredits',blurUpcoming:'betterCrunchyrollBlurUpcoming',hideUpcomingTitles:'betterCrunchyrollHideUpcomingTitles'};
 const DEFAULTS={shortcuts:{skip:'KeyS',previous:'KeyP',next:'KeyN'},autoSkipIntro:false,autoSkipRecap:false,autoSkipCredits:false,blurUpcoming:false,hideUpcomingTitles:false};
 const popupElement=document.querySelector('.popup');
@@ -7,6 +7,7 @@ const toggleButton=document.getElementById('toggleButton');
 const versionText=document.getElementById('versionText');
 const logoImage=document.querySelector('.popup__logo');
 const settingsButton=document.getElementById('settingsButton');
+const mainHeader=document.getElementById('mainHeader');
 const mainView=document.getElementById('mainView');
 const settingsView=document.getElementById('settingsView');
 const backSettingsButton=document.getElementById('backSettingsButton');
@@ -25,8 +26,8 @@ function renderDraft(){for(const[id,b]of Object.entries(settingButtons))b.setAtt
 function resetDraft(){draftSettings=clone(savedSettings);activeShortcut=null;captureHint.hidden=true;Object.values(shortcutButtons).forEach(b=>b.classList.remove('capturing'));renderDraft();}
 async function load(){const stored=await chrome.storage.local.get({[STORAGE_KEY]:true,[KEYS.shortcuts]:DEFAULTS.shortcuts,[KEYS.autoSkipIntro]:false,[KEYS.autoSkipRecap]:false,[KEYS.autoSkipCredits]:false,[KEYS.blurUpcoming]:false,[KEYS.hideUpcomingTitles]:false});renderEnabled(stored[STORAGE_KEY]);savedSettings=normalizeSettings(stored);resetDraft();versionText.textContent=`v${VERSION}`;}
 toggleButton.addEventListener('click',async()=>{const current=toggleButton.getAttribute('aria-checked')==='true';await chrome.storage.local.set({[STORAGE_KEY]:!current});renderEnabled(!current);});
-settingsButton.addEventListener('click',()=>{resetDraft();mainView.hidden=true;settingsView.hidden=false;});
-backSettingsButton.addEventListener('click',()=>{resetDraft();settingsView.hidden=true;mainView.hidden=false;});
+settingsButton.addEventListener('click',()=>{resetDraft();mainHeader.hidden=true;mainView.hidden=true;settingsView.hidden=false;settingsView.scrollTop=0;});
+backSettingsButton.addEventListener('click',()=>{resetDraft();settingsView.hidden=true;mainView.hidden=false;mainHeader.hidden=false;});
 for(const[id,b]of Object.entries(settingButtons))b.addEventListener('click',()=>{draftSettings[id]=!draftSettings[id];renderDraft();});
 for(const[name,b]of Object.entries(shortcutButtons))b.addEventListener('click',()=>{activeShortcut=name;captureHint.hidden=false;Object.values(shortcutButtons).forEach(x=>x.classList.remove('capturing'));b.classList.add('capturing');});
 document.addEventListener('keydown',e=>{if(!activeShortcut)return;e.preventDefault();e.stopPropagation();if(e.code==='Escape'){activeShortcut=null;captureHint.hidden=true;Object.values(shortcutButtons).forEach(b=>b.classList.remove('capturing'));return;}if(e.ctrlKey||e.altKey||e.metaKey||e.key==='Tab')return;draftSettings.shortcuts[activeShortcut]=e.code;renderDraft();Object.values(shortcutButtons).forEach(b=>b.classList.remove('capturing'));activeShortcut=null;captureHint.hidden=true;},true);
