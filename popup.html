@@ -8,12 +8,12 @@
   </head>
   <body>
     <main class="popup" aria-label="Better Crunchyroll">
-      <header class="popup__header">
+      <header class="popup__header" id="mainHeader">
         <img class="popup__logo" src="icons/icon128.png" alt="Better Crunchyroll" />
         <button id="settingsButton" class="icon-button" type="button" aria-label="Open settings" title="Settings">⚙</button>
       </header>
 
-      <section id="mainView" class="view" aria-label="Extension controls">
+      <section id="mainView" class="view main-view" aria-label="Extension controls">
         <div class="control">
           <button id="toggleButton" class="switch" type="button" role="switch" aria-checked="true" aria-label="Toggle Better Crunchyroll">
             <span class="switch__thumb" aria-hidden="true"></span>
@@ -51,7 +51,7 @@
         <button id="confirmButton" class="confirm-button" type="button" disabled>Confirm</button>
       </section>
 
-      <footer class="popup__footer"><span id="versionText">v2.23</span></footer>
+      <footer class="popup__footer"><span id="versionText">v2.24</span></footer>
     </main>
     <script src="popup.js"></script>
   </body>
