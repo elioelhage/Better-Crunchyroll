@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.15** refines the watch-page episode controls and episode-list layout.
+**Version 0.2.16** fixes the episode-list implementation by targeting the actual visible episode-list content inside Crunchyroll's open episode dialog.
 
 ## What it does
 - Preserves the native Crunchyroll player skin in fullscreen.
@@ -10,13 +10,17 @@
 - Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
 - Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
 - Includes a compact popup with the extension logo, enable/disable switch, and version footer.
-- Converts the episode list to a vertical list with smaller side thumbnails, earliest-to-latest ordering, watched-state fading, and automatic positioning on the current episode.
-- Fine-tunes the centered episode title by moving it 3px downward and shifts the episode-list SVG slightly left for optical alignment.
+- Converts the **actual visible episode-list modal content wrapper** into a vertical episode list with smaller left-side thumbnails.
+- Keeps episodes ordered **E1 → latest** and scrolls the modal to the episode currently being watched when opened.
+- Fades watched episodes, including their thumbnails.
+- Moves the player episode title 3px downward and shifts the **Back-button SVG** slightly left for optical alignment; the episode-list SVG is left unchanged.
+- The popup logo now switches between the colored and grayscale PNG states with the extension toggle.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
-| **2.15** | Vertical episode list with side thumbnails, current-episode positioning, watched-state fading, and small player-control alignment tweaks. |
+| **2.16** | Reworked the actual visible episode-list modal wrapper into a vertical list, current-episode positioning, watched-state fading, Back SVG optical adjustment, and popup logo state synchronization. |
+| **2.15** | Initial vertical episode-list attempt plus small player-control alignment tweaks. |
 | **2.14** | Corrected Discover feed reordering and restored transparent idle Back-button circle. |
 | **2.13** | Initial attempt at video-loading protection and Discover-page Continue Watching reordering. |
 | **2.12** | New extension logo, larger popup logo, grayscale/color icon states, and simplified popup. |
@@ -48,7 +52,7 @@ Better-Crunchyroll/
 ├── popup.js
 ├── styles.css
 ├── v213.js
-├── v215.js
+├── v216.js
 ├── icons/
 └── versions/
 ```
