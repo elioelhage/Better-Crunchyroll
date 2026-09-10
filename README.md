@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.20** keeps the v2.18 player and button behavior intact and adds a safe, CSS-only episode-list layout change.
+**Version 0.2.21** keeps the stable v2.20 episode-list implementation and adds small visual and responsive refinements.
 
 ## What it does
 - Preserves the native Crunchyroll player skin in fullscreen.
@@ -11,13 +11,17 @@
 - Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
 - Includes a compact popup with the extension logo, enable/disable switch, and version footer.
 - Changes only the native `erc-playable-collection state-dt-condensed` episode grid into a vertical list inside the real `erc-episode-list-modal`.
-- Keeps Crunchyroll's episode DOM intact: no sorting, cloning, reparenting, or card movement is performed in v2.20.
-- Uses smaller left-side thumbnails with episode information on the right.
+- Keeps Crunchyroll's episode DOM intact: no sorting, cloning, reparenting, or card movement is performed for the list layout.
+- Keeps the current episode centered when the episode list is opened.
+- Keeps the `Dub | Sub` metadata visible while hovering episode cards.
+- Adds a compact gray custom scrollbar to the episode-list scroll region.
+- Makes the episode title responsive: it is centered in the actual space between the left and right player control stacks and disappears when there is not enough room.
 - Retains the existing extension-off cleanup behavior.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.21** | Episode-list hover metadata fix, current-episode centering, custom gray scrollbar, and responsive episode-title alignment/hiding. |
 | **2.20** | Safe CSS-only conversion of the real `erc-playable-collection.state-dt-condensed` episode grid into a vertical list; no DOM reparenting and no player-button changes. |
 | **2.19** | Targets the actual `content-wrapper--MF5LS.episode-list-content` hierarchy and attempts a full episode-list transformation. |
 | **2.18** | Back-button optical refinement and episode-list implementation cleanup. |
@@ -46,7 +50,7 @@ Better-Crunchyroll/
 ├── popup.html
 ├── popup.js
 ├── styles.css
-├── v220.js
+├── v221.js
 ├── icons/
 └── versions/
 ```
