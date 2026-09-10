@@ -23,8 +23,10 @@
 
       <section id="settingsView" class="view settings-view" hidden aria-label="Better Crunchyroll settings">
         <div class="settings-header">
-          <button id="backSettingsButton" class="text-button" type="button">‹ Back</button>
-          <strong>Settings</strong>
+          <button id="backSettingsButton" class="back-settings-button" type="button" aria-label="Back to main page" title="Back">
+            <span aria-hidden="true">←</span>
+          </button>
+          <strong class="settings-title">Settings</strong>
         </div>
 
         <section class="settings-section" aria-labelledby="skipSectionTitle">
@@ -39,7 +41,6 @@
           <button class="shortcut-row" data-shortcut="skip" type="button"><span>Skip active intro / recap / credits</span><kbd id="shortcutSkip">S</kbd></button>
           <button class="shortcut-row" data-shortcut="previous" type="button"><span>Previous episode</span><kbd id="shortcutPrevious">P</kbd></button>
           <button class="shortcut-row" data-shortcut="next" type="button"><span>Next episode</span><kbd id="shortcutNext">N</kbd></button>
-          <small id="captureHint" class="capture-hint" hidden>Press a key… Esc to cancel</small>
         </section>
 
         <section class="settings-section" aria-labelledby="spoilerSectionTitle">
@@ -51,7 +52,7 @@
         <button id="confirmButton" class="confirm-button" type="button" disabled>Confirm</button>
       </section>
 
-      <footer class="popup__footer"><span id="versionText">v2.24</span></footer>
+      <footer id="popupFooter" class="popup__footer"><span id="versionText">v2.25</span></footer>
     </main>
     <script src="popup.js"></script>
   </body>
