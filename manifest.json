@@ -24,7 +24,6 @@
       "js": [
         "crunchyroll-content.js",
         "v221.js",
-        "v222.js",
         "v223.js"
       ],
       "run_at": "document_start"
