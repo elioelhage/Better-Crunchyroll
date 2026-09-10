@@ -52,6 +52,7 @@
 
   function findProgressElement(shell) {
     if (!(shell instanceof HTMLElement)) return null;
+    const shellRect = shell.getBoundingClientRect();
     const candidates = Array.from(shell.querySelectorAll(
       '[data-testid*="progress" i], [aria-label*="progress" i], [class*="progress" i]'
     )).filter((element) => {
@@ -60,10 +61,10 @@
       const style = getComputedStyle(element);
       return style.display !== 'none'
         && style.visibility !== 'hidden'
-        && rect.width > shell.getBoundingClientRect().width * 0.45
+        && rect.width > shellRect.width * 0.45
         && rect.height > 0
         && rect.height <= 32
-        && rect.top > shell.getBoundingClientRect().top + shell.getBoundingClientRect().height * 0.55;
+        && rect.top > shellRect.top + shellRect.height * 0.55;
     });
 
     if (!candidates.length) return null;
@@ -98,21 +99,27 @@
     const center = ((leftRect.right + rightRect.left) / 2) - shellRect.left;
     const progress = findProgressElement(shell);
     const progressRect = progress?.getBoundingClientRect?.();
-
-    // Put the title clearly ABOVE the scrubber rather than on top of the
-    // timeline. Fall back to the control row when the progress element is
-    // unavailable, which keeps the title usable across player variants.
-    const anchorTop = progressRect && progressRect.width > shellRect.width * 0.45
-      ? progressRect.top
-      : Math.min(leftRect.top, rightRect.top);
-    const bottom = Math.max(52, shellRect.bottom - anchorTop + 18);
     const maxWidth = Math.max(160, Math.min(820, available - 28));
 
     title.style.setProperty('display', 'block', 'important');
     title.style.setProperty('left', `${center}px`, 'important');
-    title.style.setProperty('bottom', `${bottom}px`, 'important');
     title.style.setProperty('max-width', `${maxWidth}px`, 'important');
     title.style.setProperty('transform', 'translateX(-50%)', 'important');
+
+    // Keep the title vertically centered in the bottom player control bar.
+    // The scrubber is only a guardrail so the title never overlaps it.
+    const controlsTop = Math.min(leftRect.top, rightRect.top);
+    const controlsBottom = Math.max(leftRect.bottom, rightRect.bottom);
+    const controlsCenter = (controlsTop + controlsBottom) / 2;
+    const titleHeight = Math.max(title.offsetHeight, 1);
+    const titleTop = controlsCenter - (titleHeight / 2);
+    const bottomGap = Math.max(8, shellRect.bottom - titleTop - titleHeight);
+    const progressGap = progressRect ? titleTop - progressRect.bottom : Infinity;
+    const safeBottomGap = progressGap < 6
+      ? Math.max(8, shellRect.bottom - (progressRect.bottom + 6) - titleHeight)
+      : bottomGap;
+
+    title.style.setProperty('bottom', `${safeBottomGap}px`, 'important');
   }
 
   function schedulePosition() {
