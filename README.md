@@ -1,24 +1,98 @@
 # Better Crunchyroll
 
-**Version 0.2.37** refines the in-player episode title with cleaner typography, responsive sizing, stronger readability, and dynamic positioning above the scrubber and between the surrounding player controls while preserving the v2.36 spoiler and player behavior.
+**Better Crunchyroll** is a community-made browser extension focused on making Crunchyroll more comfortable, practical, and customizable to use.
 
-## What it does
-- Preserves the native Crunchyroll player skin in fullscreen.
-- Adds a compact Crunchyroll-style Back control with a transparent idle circle and hover/focus circle.
-- Shows the current episode title in the player controls.
-- Adds an episode-list control styled to fit the native player.
-- Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
-- Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
-- Includes a compact popup with a colored/grayscale logo, enable/disable switch, and version footer.
-- Converts the native `erc-playable-collection state-dt-condensed` episode grid into a vertical list without moving or reparenting Crunchyroll episode nodes.
-- Keeps the current episode centered when the episode list is opened.
-- Keeps the `Dub | Sub` metadata visible while hovering a selected episode.
-- Adds a compact gray custom scrollbar to the episode-list scroll region.
-- Makes the episode title responsive: it is centered in the actual space between the left and right player control stacks and disappears when there is not enough room.
-- v2.37 adds a dedicated presentation layer for the episode title so its typography and vertical placement track the actual player scrubber/control geometry instead of sitting on top of the timeline.
-- When the extension is turned off, its injected styles and episode-list changes are removed.
+It keeps Crunchyroll's existing service and player, then adds quality-of-life improvements around the watch experience—cleaner episode navigation, smarter player controls, optional spoiler protection, keyboard shortcuts, automatic skipping, and a more polished fullscreen layout.
 
-## Version History
+## Features
+
+### Better playback experience
+- Custom in-player **episode title** with responsive typography and positioning.
+- A compact **Back** control designed to stay available in the fullscreen player.
+- Dedicated **episode-list** control integrated into the player controls.
+- Cleaner fullscreen presentation while preserving the native Crunchyroll video player.
+- Automatic removal of a stuck loading overlay when the video has actually become playable.
+
+### Smarter episode navigation
+- Converts Crunchyroll's native episode grid into a **compact vertical episode list** without reparenting the original episode nodes.
+- Automatically **centers the current episode** when the episode list opens.
+- Keeps **Dub | Sub** metadata visible while episode cards are hovered.
+- Adds a compact **custom scrollbar** to the episode-list area.
+- Improves the Discover page by moving **Continue Watching** directly below **Trending in Canada**.
+
+### Spoiler protection
+- **Blur upcoming episode thumbnails** so future episodes do not reveal their visuals.
+- **Hide upcoming episode titles** while keeping the original Crunchyroll links and content intact.
+- Designed to work with dynamically rendered and lazy-loaded episode lists.
+
+### Automatic skipping
+- Optional automatic **intro**, **recap**, and **credits** skipping.
+- Each skip type can be enabled independently.
+
+### Keyboard shortcuts
+- **S** — skip an active intro, recap, or credits segment.
+- **P** — previous episode.
+- **N** — next episode.
+- Shortcuts can be customized from the extension settings.
+
+### Simple extension controls
+- Large master **On / Off** switch.
+- Dedicated settings screen with grouped controls.
+- Changes are staged until **Confirm** is pressed.
+- Confirming settings reloads the active Crunchyroll tab so changes take effect cleanly.
+- Popup shows the current extension version and uses matching enabled/disabled artwork.
+
+## Why Better Crunchyroll?
+
+Crunchyroll already does the hard part: delivering the anime library and video service. Better Crunchyroll is meant to improve the parts around that experience—navigation, controls, readability, spoiler protection, and everyday convenience—without trying to replace Crunchyroll itself.
+
+The project is actively developed around real Crunchyroll behavior, so some features use defensive DOM detection and dynamic observers to remain reliable as Crunchyroll's interface changes.
+
+## Installation
+
+1. Download or clone the repository.
+2. Open `chrome://extensions` in Chrome or the equivalent extensions page in a Chromium-based browser.
+3. Enable **Developer mode**.
+4. Select **Load unpacked**.
+5. Choose the Better Crunchyroll folder containing `manifest.json`.
+
+## Project Structure
+
+```text
+Better-Crunchyroll/
+├── manifest.json
+├── crunchyroll-content.js
+├── background.js
+├── popup.html
+├── popup.js
+├── styles.css
+├── v221.js
+├── v236.js
+├── v237.js
+├── icons/
+└── versions/
+```
+
+## Compatibility
+
+- Manifest V3
+- Targets `*.crunchyroll.com`
+- Designed primarily for modern Chromium-based browsers
+
+## Development Notes
+
+Better Crunchyroll avoids reimplementing the Crunchyroll service itself. The extension works as an enhancement layer over the existing site and player, with individual features kept as isolated modules where practical so that new changes do not unnecessarily disturb established functionality.
+
+## Disclaimer
+
+Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
+
+Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
+
+---
+
+# Version History
+
 | Version | Highlights |
 | --- | --- |
 | **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning above the scrubber while keeping it centered between the player controls. Existing v2.36 behavior remains intact. |
@@ -43,34 +117,3 @@
 | **2.12** | New extension logo, larger popup logo, grayscale/color icon states, and simplified popup. |
 | **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
 | **2.10** | Episode-list control and episode-title/player-control refinements. |
-
-## Installation (Developer Mode)
-1. Download or clone the repository.
-2. Open `chrome://extensions` in Chrome.
-3. Enable **Developer mode**.
-4. Choose **Load unpacked**.
-5. Select the extension directory containing `manifest.json`.
-
-## Project Structure
-```text
-Better-Crunchyroll/
-├── manifest.json
-├── crunchyroll-content.js
-├── background.js
-├── popup.html
-├── popup.js
-├── styles.css
-├── v221.js
-├── v236.js
-├── v237.js
-├── icons/
-└── versions/
-```
-
-## Compatibility
-The extension targets `*.crunchyroll.com` and uses **Manifest V3**.
-
-## Disclaimer
-Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
-
-Crunchyroll is a trademark of its respective owner. This project is intended as a personal/community enhancement and does not provide or redistribute Crunchyroll content.
