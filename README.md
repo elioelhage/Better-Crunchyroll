@@ -1,26 +1,20 @@
 # Better Crunchyroll
 
-**Version 0.2.21** keeps the stable v2.20 episode-list implementation and adds small visual and responsive refinements.
+**Version 0.2.22** adds focused power-user options without turning Better Crunchyroll into an over-customized control panel.
 
 ## What it does
-- Preserves the native Crunchyroll player skin in fullscreen.
-- Keeps the v2.18 Back button and other player controls unchanged.
-- Shows the current episode title in the player controls.
-- Adds an episode-list control styled to fit the native player.
-- Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
-- Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
-- Includes a compact popup with the extension logo, enable/disable switch, and version footer.
-- Changes only the native `erc-playable-collection state-dt-condensed` episode grid into a vertical list inside the real `erc-episode-list-modal`.
-- Keeps Crunchyroll's episode DOM intact: no sorting, cloning, reparenting, or card movement is performed for the list layout.
-- Keeps the current episode centered when the episode list is opened.
-- Keeps the `Dub | Sub` metadata visible while hovering episode cards.
-- Adds a compact gray custom scrollbar to the episode-list scroll region.
-- Makes the episode title responsive: it is centered in the actual space between the left and right player control stacks and disappears when there is not enough room.
-- Retains the existing extension-off cleanup behavior.
+- Preserves the stable player and episode-list experience from v2.20/v2.21.
+- Adds a settings button to the popup.
+- Adds configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
+- Adds independent automatic skip toggles for **recap**, **intro**, and **credits**, all OFF by default.
+- Adds optional spoiler protection in the episode list: **blur upcoming episode thumbnails** and **hide upcoming episode titles**.
+- Keeps the current episode list and player controls intact.
+- Keeps the extension icon and popup logo colored/grayscale based on enabled state.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.22** | Focused settings panel, configurable S/P/N shortcuts, automatic recap/intro/credits skipping, and optional upcoming-episode spoiler protection. |
 | **2.21** | Episode-list hover metadata fix, current-episode centering, custom gray scrollbar, and responsive episode-title alignment/hiding. |
 | **2.20** | Safe CSS-only conversion of the real `erc-playable-collection.state-dt-condensed` episode grid into a vertical list; no DOM reparenting and no player-button changes. |
 | **2.19** | Targets the actual `content-wrapper--MF5LS.episode-list-content` hierarchy and attempts a full episode-list transformation. |
@@ -51,6 +45,7 @@ Better-Crunchyroll/
 ├── popup.js
 ├── styles.css
 ├── v221.js
+├── v222.js
 ├── icons/
 └── versions/
 ```
