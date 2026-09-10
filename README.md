@@ -1,52 +1,43 @@
-# Better Crunchyroll
+# Better-Crunchyroll
 
-**Better Crunchyroll** is a community-made browser extension focused on making Crunchyroll more comfortable, practical, and customizable to use.
-
-It keeps Crunchyroll's existing service and player, then adds quality-of-life improvements around the watch experience cleaner episode navigation, smarter player controls, optional spoiler protection, keyboard shortcuts, automatic skipping, and a more polished fullscreen layout.
+**Better-Crunchyroll** is a browser extension that improves the Crunchyroll watching experience with better player controls, episode navigation, spoiler protection, automatic skipping, keyboard shortcuts, and other quality-of-life improvements.
 
 ## Features
 
-### Better playback experience
-- Custom in-player **episode title** styled to feel closer to Crunchyroll's native typography, with responsive sizing and optical positioning inside the bottom player control bar.
-- A compact **Back** control designed to stay available in the fullscreen player.
+### Better Playback
+- Custom in-player **episode title** with responsive sizing and positioning inside the bottom player control bar.
+- Compact **Back** control for the fullscreen player.
 - Dedicated **episode-list** control integrated into the player controls.
 - Cleaner fullscreen presentation while preserving the native Crunchyroll video player.
-- Automatic removal of a stuck loading overlay when the video has actually become playable.
+- Protection against a loading overlay remaining after playback has become available.
 
-### Smarter episode navigation
-- Converts Crunchyroll's native episode grid into a **compact vertical episode list** without reparenting the original episode nodes.
+### Episode Navigation
+- Converts the native episode grid into a **compact vertical episode list**.
 - Automatically **centers the current episode** when the episode list opens.
 - Keeps **Dub | Sub** metadata visible while episode cards are hovered.
 - Adds a compact **custom scrollbar** to the episode-list area.
-- Improves the Discover page by moving **Continue Watching** directly below **Trending in Canada**.
+- Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
 
-### Spoiler protection
-- **Blur upcoming episode thumbnails** so future episodes do not reveal their visuals.
-- **Hide upcoming episode titles** while keeping the original Crunchyroll links and content intact.
-- Designed to work with dynamically rendered and lazy-loaded episode lists.
+### Spoiler Protection
+- **Blur upcoming episode thumbnails** to avoid visual spoilers.
+- **Hide upcoming episode titles** while preserving the original Crunchyroll links and episode content.
+- Supports dynamically rendered and lazy-loaded episode lists.
 
-### Automatic skipping
+### Automatic Skipping
 - Optional automatic **intro**, **recap**, and **credits** skipping.
 - Each skip type can be enabled independently.
 
-### Keyboard shortcuts
+### Keyboard Shortcuts
 - **S** — skip an active intro, recap, or credits segment.
 - **P** — previous episode.
 - **N** — next episode.
 - Shortcuts can be customized from the extension settings.
 
-### Simple extension controls
-- Large master **On / Off** switch.
-- Dedicated settings screen with grouped controls.
-- Changes are staged until **Confirm** is pressed.
+### Settings
+- Master **On / Off** control.
+- Grouped settings for skipping, keyboard shortcuts, and spoiler protection.
+- Settings changes are staged until **Confirm** is pressed.
 - Confirming settings reloads the active Crunchyroll tab so changes take effect cleanly.
-- Popup shows the current extension version and uses matching enabled/disabled artwork.
-
-## Why Better Crunchyroll?
-
-Crunchyroll already does the hard part: delivering the anime library and video service. Better Crunchyroll is meant to improve the parts around that experience—navigation, controls, readability, spoiler protection, and everyday convenience—without trying to replace Crunchyroll itself.
-
-The project is actively developed around real Crunchyroll behavior, so some features use defensive DOM detection and dynamic observers to remain reliable as Crunchyroll's interface changes.
 
 ## Installation
 
@@ -54,7 +45,13 @@ The project is actively developed around real Crunchyroll behavior, so some feat
 2. Open `chrome://extensions` in Chrome or the equivalent extensions page in a Chromium-based browser.
 3. Enable **Developer mode**.
 4. Select **Load unpacked**.
-5. Choose the Better Crunchyroll folder containing `manifest.json`.
+5. Choose the Better-Crunchyroll folder containing `manifest.json`.
+
+## Compatibility
+
+- Manifest V3
+- Targets `*.crunchyroll.com`
+- Designed primarily for modern Chromium-based browsers
 
 ## Project Structure
 
@@ -73,15 +70,11 @@ Better-Crunchyroll/
 └── versions/
 ```
 
-## Compatibility
+## Disclaimer
 
-- Manifest V3
-- Targets `*.crunchyroll.com`
-- Designed primarily for modern Chromium-based browsers
+Better-Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
 
-## Development Notes
-
-Better Crunchyroll avoids reimplementing the Crunchyroll service itself. The extension works as an enhancement layer over the existing site and player, with individual features kept as isolated modules where practical so that new changes do not unnecessarily disturb established functionality.
+Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
 
 ---
 
@@ -111,9 +104,3 @@ Better Crunchyroll avoids reimplementing the Crunchyroll service itself. The ext
 | **2.12** | New extension logo, larger popup logo, grayscale/color icon states, and simplified popup. |
 | **2.11** | Back-button initial lock reduced to 6.5 seconds; transparent idle Back circle with hover/focus circle. |
 | **2.10** | Episode-list control and episode-title/player-control refinements. |
-
-## Disclaimer
-
-Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
-
-Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
