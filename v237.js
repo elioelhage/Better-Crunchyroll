@@ -19,11 +19,11 @@
     style.textContent = `
       #${TITLE_ID} {
         color: #ffffff !important;
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        font-family: inherit !important;
         font-size: clamp(14px, 1vw, 19px) !important;
         font-weight: 600 !important;
-        line-height: 1.22 !important;
-        letter-spacing: 0 !important;
+        line-height: 1.2 !important;
+        letter-spacing: normal !important;
         text-align: center !important;
         white-space: nowrap !important;
         overflow: hidden !important;
@@ -106,11 +106,11 @@
     title.style.setProperty('max-width', `${maxWidth}px`, 'important');
     title.style.setProperty('transform', 'translateX(-50%)', 'important');
 
-    // Keep the title vertically centered in the bottom player control bar.
-    // The scrubber is only a guardrail so the title never overlaps it.
+    // Center the title in the bottom control row, then nudge it upward by
+    // 3px for optical alignment with Crunchyroll's native controls.
     const controlsTop = Math.min(leftRect.top, rightRect.top);
     const controlsBottom = Math.max(leftRect.bottom, rightRect.bottom);
-    const controlsCenter = (controlsTop + controlsBottom) / 2;
+    const controlsCenter = (controlsTop + controlsBottom) / 2 - 3;
     const titleHeight = Math.max(title.offsetHeight, 1);
     const titleTop = controlsCenter - (titleHeight / 2);
     const bottomGap = Math.max(8, shellRect.bottom - titleTop - titleHeight);
