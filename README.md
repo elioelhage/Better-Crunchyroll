@@ -2,7 +2,7 @@
 
 **Better Crunchyroll** is a community-made browser extension focused on making Crunchyroll more comfortable, practical, and customizable to use.
 
-It keeps Crunchyroll's existing service and player, then adds quality-of-life improvements around the watch experience—cleaner episode navigation, smarter player controls, optional spoiler protection, keyboard shortcuts, automatic skipping, and a more polished fullscreen layout.
+It keeps Crunchyroll's existing service and player, then adds quality-of-life improvements around the watch experience cleaner episode navigation, smarter player controls, optional spoiler protection, keyboard shortcuts, automatic skipping, and a more polished fullscreen layout.
 
 ## Features
 
