@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.30** makes upcoming-episode spoiler protection follow every recreated or lazy-loaded episode list across Crunchyroll show navigation.
+**Version 0.2.31** fixes an episode-list opening regression introduced by the spoiler-protection refresh logic.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
@@ -14,14 +14,14 @@
 - Keeps configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
 - Supports independent automatic skipping for **intro**, **recap**, and **credits**, all OFF by default.
 - Supports optional spoiler protection: blur upcoming episode thumbnails and hide upcoming episode titles.
-- Re-evaluates **all** rendered episode-list collections rather than waiting for the user to interact with one specific list first.
-- Reapplies spoiler protection after SPA route changes, history navigation, lazy rendering, and episode-list replacement.
-- Hidden upcoming titles are replaced with **Episode X**, where X is the detected episode number.
-- When spoiler options are OFF, their visual effects and title replacements are explicitly removed.
+- Spoiler protection is scoped to the native episode modal and no longer uses a page-wide MutationObserver refresh loop.
+- Rechecks spoiler protection after show navigation, episode-list opening, and delayed/lazy rendering without interfering with modal opening.
+- Hidden upcoming titles are replaced with **Episode X**.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
 | **2.29** | Hardened upcoming-episode spoiler protection across Crunchyroll show changes and SPA navigation. |
 | **2.26** | Fixed popup view separation/navigation, removed obsolete capture-hint logic, hardened keyboard and skip controls, and ensured disabled spoiler settings have no effect. |
@@ -59,7 +59,7 @@ Better-Crunchyroll/
 ├── popup.js
 ├── styles.css
 ├── v221.js
-├── v230.js
+├── v231.js
 ├── icons/
 └── versions/
 ```
