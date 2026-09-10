@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.26** fixes the popup navigation and hardens the v2.22 settings features so the controls behave predictably when enabled or disabled.
+**Version 0.2.29** hardens spoiler protection so it consistently follows Crunchyroll's single-page navigation and asynchronously rendered episode lists across different shows.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
@@ -14,12 +14,14 @@
 - Keeps configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
 - Supports independent automatic skipping for **intro**, **recap**, and **credits**, all OFF by default.
 - Supports optional spoiler protection: blur upcoming episode thumbnails and hide upcoming episode titles.
-- Disabled spoiler settings now remove their attributes completely so they have no visual effect.
-- Uses more tolerant matching for Crunchyroll's skip and previous/next episode controls.
+- Re-evaluates spoiler protection across all visible episode-list collections instead of only the first list found.
+- Reapplies spoiler protection after SPA navigation, history changes, and asynchronous episode-list rendering.
+- When spoiler options are OFF, their visual effects and title replacements are explicitly removed.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.29** | Hardened upcoming-episode spoiler protection across Crunchyroll show changes and SPA navigation; refreshes all visible episode lists and reapplies blur/title hiding after asynchronous rendering. |
 | **2.26** | Fixed popup view separation/navigation, removed obsolete capture-hint logic, hardened keyboard and skip controls, and ensured disabled spoiler settings have no effect. |
 | **2.25** | Main/settings popup separation, full-popup settings view, centered Settings header, circular Back button, and removal of shortcut helper text. |
 | **2.24** | Refined popup flow: balanced main view, dedicated full settings view, scrollable settings, and clear Confirm/apply state. |
@@ -55,7 +57,7 @@ Better-Crunchyroll/
 ├── popup.js
 ├── styles.css
 ├── v221.js
-├── v226.js
+├── v229.js
 ├── icons/
 └── versions/
 ```
