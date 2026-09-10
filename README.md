@@ -1,24 +1,24 @@
 # Better Crunchyroll
 
-**Version 0.2.23** expands the focused settings panel while keeping the player and episode-list behavior stable.
+**Version 0.2.24** refines the popup so the main screen stays focused on the logo, master toggle, and version while settings take over the popup when opened.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
-- Adds a longer, scrollable settings panel with separate **Skipping**, **Keyboard shortcuts**, and **Blurring & hiding** sections.
+- Keeps the main popup focused on the large extension logo, master on/off control, settings button, and version footer with balanced vertical spacing.
+- Opens a dedicated settings view that takes over the popup instead of sharing space with the main controls.
+- Keeps settings scrollable with a custom gray scrollbar.
 - Uses dedicated on/off toggle controls for each setting instead of native HTML checkboxes.
-- Stages setting changes locally in the popup until **Confirm** is clicked.
-- Keeps **Confirm** disabled when there are no pending changes; clicking it saves settings and reloads the active Crunchyroll tab.
+- Stages setting changes locally until **Confirm** is clicked.
+- Keeps **Confirm** muted when there are no changes and turns it orange when changes are pending.
+- Clicking **Confirm** saves settings and reloads the active Crunchyroll tab so changes take effect cleanly.
 - Keeps configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
 - Adds independent automatic skip toggles for **recap**, **intro**, and **credits**, all OFF by default.
 - Adds optional spoiler protection in the episode list: blur upcoming episode thumbnails and hide upcoming episode titles.
-- Adds a custom gray scrollbar to the settings view.
-- Softens upcoming-thumbnail blur edges and reduces the previous thumbnail enlargement by roughly 5%.
-- Keeps the current episode list and player controls intact.
-- Keeps the extension icon and popup logo colored/grayscale based on enabled state.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.24** | Refined popup flow: balanced main view, dedicated full settings view, scrollable settings, and clear Confirm/apply state. |
 | **2.23** | Expanded grouped settings UI, custom toggles, staged Confirm/apply flow with Crunchyroll reload, custom settings scrollbar, and softer/slightly smaller spoiler thumbnail blur. |
 | **2.22** | Focused settings panel, configurable S/P/N shortcuts, automatic recap/intro/credits skipping, and optional upcoming-episode spoiler protection. |
 | **2.21** | Episode-list hover metadata fix, current-episode centering, custom gray scrollbar, and responsive episode-title alignment/hiding. |
