@@ -1,14 +1,18 @@
 const STORAGE_KEY = 'betterCrunchyrollEnabled';
-const VERSION = '0.2.15';
+const VERSION = '0.2.16';
 
 const popupElement = document.querySelector('.popup');
 const toggleButton = document.getElementById('toggleButton');
 const versionText = document.getElementById('versionText');
+const logoImage = document.querySelector('.popup__logo');
 
 function render(enabled) {
   const isEnabled = enabled !== false;
 
   popupElement.dataset.enabled = String(isEnabled);
+  if (logoImage) {
+    logoImage.src = isEnabled ? 'icons/icon128.png' : 'icons/icon128-off.png';
+  }
   toggleButton.setAttribute('aria-checked', String(isEnabled));
   toggleButton.setAttribute(
     'aria-label',
