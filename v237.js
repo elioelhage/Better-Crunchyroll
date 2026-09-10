@@ -10,6 +10,7 @@
   let observedShell = null;
   let observedLeft = null;
   let observedRight = null;
+  let observedProgress = null;
 
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
@@ -19,15 +20,15 @@
       #${TITLE_ID} {
         color: #ffffff !important;
         font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-        font-size: clamp(14px, 1.05vw, 20px) !important;
-        font-weight: 650 !important;
-        line-height: 1.25 !important;
-        letter-spacing: -0.01em !important;
+        font-size: clamp(14px, 1vw, 19px) !important;
+        font-weight: 600 !important;
+        line-height: 1.22 !important;
+        letter-spacing: 0 !important;
         text-align: center !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72), 0 3px 10px rgba(0, 0, 0, 0.42) !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.78), 0 3px 10px rgba(0, 0, 0, 0.45) !important;
         pointer-events: none !important;
         user-select: none !important;
         z-index: 4 !important;
@@ -38,7 +39,7 @@
 
       @media (max-width: 700px) {
         #${TITLE_ID} {
-          font-size: clamp(13px, 2.7vw, 17px) !important;
+          font-size: clamp(13px, 2.55vw, 17px) !important;
         }
       }
     `;
@@ -47,6 +48,27 @@
 
   function removeStyle() {
     document.getElementById(STYLE_ID)?.remove();
+  }
+
+  function findProgressElement(shell) {
+    if (!(shell instanceof HTMLElement)) return null;
+    const candidates = Array.from(shell.querySelectorAll(
+      '[data-testid*="progress" i], [aria-label*="progress" i], [class*="progress" i]'
+    )).filter((element) => {
+      if (!(element instanceof HTMLElement)) return false;
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return style.display !== 'none'
+        && style.visibility !== 'hidden'
+        && rect.width > shell.getBoundingClientRect().width * 0.45
+        && rect.height > 0
+        && rect.height <= 32
+        && rect.top > shell.getBoundingClientRect().top + shell.getBoundingClientRect().height * 0.55;
+    });
+
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top);
+    return candidates[0];
   }
 
   function positionTitle() {
@@ -74,8 +96,16 @@
     }
 
     const center = ((leftRect.right + rightRect.left) / 2) - shellRect.left;
-    const controlTop = Math.min(leftRect.top, rightRect.top);
-    const bottom = Math.max(58, shellRect.bottom - controlTop + 12);
+    const progress = findProgressElement(shell);
+    const progressRect = progress?.getBoundingClientRect?.();
+
+    // Put the title clearly ABOVE the scrubber rather than on top of the
+    // timeline. Fall back to the control row when the progress element is
+    // unavailable, which keeps the title usable across player variants.
+    const anchorTop = progressRect && progressRect.width > shellRect.width * 0.45
+      ? progressRect.top
+      : Math.min(leftRect.top, rightRect.top);
+    const bottom = Math.max(52, shellRect.bottom - anchorTop + 18);
     const maxWidth = Math.max(160, Math.min(820, available - 28));
 
     title.style.setProperty('display', 'block', 'important');
@@ -95,8 +125,9 @@
     const shell = title?.parentElement;
     const left = shell?.querySelector?.('[data-testid="bottom-left-controls-stack"]');
     const right = shell?.querySelector?.('[data-testid="bottom-right-controls-stack"]');
+    const progress = shell instanceof HTMLElement ? findProgressElement(shell) : null;
 
-    if (shell === observedShell && left === observedLeft && right === observedRight) {
+    if (shell === observedShell && left === observedLeft && right === observedRight && progress === observedProgress) {
       schedulePosition();
       return;
     }
@@ -106,12 +137,14 @@
     observedShell = shell instanceof HTMLElement ? shell : null;
     observedLeft = left instanceof HTMLElement ? left : null;
     observedRight = right instanceof HTMLElement ? right : null;
+    observedProgress = progress instanceof HTMLElement ? progress : null;
 
     if (observedShell) {
       resizeObserver = new ResizeObserver(schedulePosition);
       resizeObserver.observe(observedShell);
       if (observedLeft) resizeObserver.observe(observedLeft);
       if (observedRight) resizeObserver.observe(observedRight);
+      if (observedProgress) resizeObserver.observe(observedProgress);
     }
 
     schedulePosition();
@@ -131,6 +164,7 @@
       observedShell = null;
       observedLeft = null;
       observedRight = null;
+      observedProgress = null;
       removeStyle();
       return;
     }
