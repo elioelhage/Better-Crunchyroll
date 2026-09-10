@@ -1,6 +1,6 @@
 # Better Crunchyroll
 
-**Version 0.2.37** refines the in-player episode title with cleaner typography, responsive sizing, stronger readability, and dynamic positioning between the surrounding player controls while preserving the v2.36 spoiler and player behavior.
+**Version 0.2.37** refines the in-player episode title with cleaner typography, responsive sizing, stronger readability, and dynamic positioning above the scrubber and between the surrounding player controls while preserving the v2.36 spoiler and player behavior.
 
 ## What it does
 - Preserves the native Crunchyroll player skin in fullscreen.
@@ -15,13 +15,13 @@
 - Keeps the `Dub | Sub` metadata visible while hovering a selected episode.
 - Adds a compact gray custom scrollbar to the episode-list scroll region.
 - Makes the episode title responsive: it is centered in the actual space between the left and right player control stacks and disappears when there is not enough room.
-- v2.37 adds a dedicated presentation layer for the episode title so its font, sizing, contrast, and vertical position stay polished across player sizes and control-layout changes.
+- v2.37 adds a dedicated presentation layer for the episode title so its typography and vertical placement track the actual player scrubber/control geometry instead of sitting on top of the timeline.
 - When the extension is turned off, its injected styles and episode-list changes are removed.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
-| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning above the player controls. Existing v2.36 behavior remains intact. |
+| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning above the scrubber while keeping it centered between the player controls. Existing v2.36 behavior remains intact. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
