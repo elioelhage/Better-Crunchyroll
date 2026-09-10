@@ -1,5 +1,5 @@
 const STORAGE_KEY='betterCrunchyrollEnabled';
-const VERSION='0.2.26';
+const VERSION='0.2.29';
 const KEYS={shortcuts:'betterCrunchyrollShortcuts',autoSkipIntro:'betterCrunchyrollAutoSkipIntro',autoSkipRecap:'betterCrunchyrollAutoSkipRecap',autoSkipCredits:'betterCrunchyrollAutoSkipCredits',blurUpcoming:'betterCrunchyrollBlurUpcoming',hideUpcomingTitles:'betterCrunchyrollHideUpcomingTitles'};
 const DEFAULTS={shortcuts:{skip:'KeyS',previous:'KeyP',next:'KeyN'},autoSkipIntro:false,autoSkipRecap:false,autoSkipCredits:false,blurUpcoming:false,hideUpcomingTitles:false};
 const popupElement=document.querySelector('.popup');
