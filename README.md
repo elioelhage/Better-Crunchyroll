@@ -1,19 +1,25 @@
 # Better Crunchyroll
 
-**Version 0.2.22** adds focused power-user options without turning Better Crunchyroll into an over-customized control panel.
+**Version 0.2.23** expands the focused settings panel while keeping the player and episode-list behavior stable.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
-- Adds a settings button to the popup.
-- Adds configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
+- Adds a longer, scrollable settings panel with separate **Skipping**, **Keyboard shortcuts**, and **Blurring & hiding** sections.
+- Uses dedicated on/off toggle controls for each setting instead of native HTML checkboxes.
+- Stages setting changes locally in the popup until **Confirm** is clicked.
+- Keeps **Confirm** disabled when there are no pending changes; clicking it saves settings and reloads the active Crunchyroll tab.
+- Keeps configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
 - Adds independent automatic skip toggles for **recap**, **intro**, and **credits**, all OFF by default.
-- Adds optional spoiler protection in the episode list: **blur upcoming episode thumbnails** and **hide upcoming episode titles**.
+- Adds optional spoiler protection in the episode list: blur upcoming episode thumbnails and hide upcoming episode titles.
+- Adds a custom gray scrollbar to the settings view.
+- Softens upcoming-thumbnail blur edges and reduces the previous thumbnail enlargement by roughly 5%.
 - Keeps the current episode list and player controls intact.
 - Keeps the extension icon and popup logo colored/grayscale based on enabled state.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.23** | Expanded grouped settings UI, custom toggles, staged Confirm/apply flow with Crunchyroll reload, custom settings scrollbar, and softer/slightly smaller spoiler thumbnail blur. |
 | **2.22** | Focused settings panel, configurable S/P/N shortcuts, automatic recap/intro/credits skipping, and optional upcoming-episode spoiler protection. |
 | **2.21** | Episode-list hover metadata fix, current-episode centering, custom gray scrollbar, and responsive episode-title alignment/hiding. |
 | **2.20** | Safe CSS-only conversion of the real `erc-playable-collection.state-dt-condensed` episode grid into a vertical list; no DOM reparenting and no player-button changes. |
@@ -46,6 +52,7 @@ Better-Crunchyroll/
 ├── styles.css
 ├── v221.js
 ├── v222.js
+├── v223.js
 ├── icons/
 └── versions/
 ```
