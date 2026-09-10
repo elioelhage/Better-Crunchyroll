@@ -1,24 +1,27 @@
 # Better Crunchyroll
 
-**Version 0.2.36** fixes upcoming-episode title hiding by targeting both the hover title and the always-visible episode-card title, and removes the duplicate legacy spoiler engine from the content-script stack.
+**Version 0.2.37** refines the in-player episode title with cleaner typography, responsive sizing, stronger readability, and dynamic positioning between the surrounding player controls while preserving the v2.36 spoiler and player behavior.
 
 ## What it does
-- Preserves the stable player and episode-list experience from v2.20/v2.21.
-- Keeps the main popup focused on the extension logo, master on/off control, settings button, and version footer.
-- Opens a dedicated settings view that replaces the main popup content until the Back control is pressed.
-- Uses grouped settings for **Skipping**, **Keyboard shortcuts**, and **Blurring & hiding**.
-- Uses dedicated on/off toggle controls instead of native HTML checkboxes.
-- Stages settings changes locally until **Confirm** is clicked.
-- Clicking **Confirm** saves settings and reloads the active Crunchyroll tab.
-- Supports configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
-- Supports independent automatic skipping for **intro**, **recap**, and **credits**, all OFF by default.
-- Supports optional spoiler protection: blur upcoming episode thumbnails and hide upcoming episode titles.
-- Spoiler protection uses Crunchyroll's semantic episode-list markers and follows dynamically rendered/lazy-loaded episode lists.
-- Hidden upcoming titles are visually hidden without rewriting or destroying the native Crunchyroll episode links.
+- Preserves the native Crunchyroll player skin in fullscreen.
+- Adds a compact Crunchyroll-style Back control with a transparent idle circle and hover/focus circle.
+- Shows the current episode title in the player controls.
+- Adds an episode-list control styled to fit the native player.
+- Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
+- Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
+- Includes a compact popup with a colored/grayscale logo, enable/disable switch, and version footer.
+- Converts the native `erc-playable-collection state-dt-condensed` episode grid into a vertical list without moving or reparenting Crunchyroll episode nodes.
+- Keeps the current episode centered when the episode list is opened.
+- Keeps the `Dub | Sub` metadata visible while hovering a selected episode.
+- Adds a compact gray custom scrollbar to the episode-list scroll region.
+- Makes the episode title responsive: it is centered in the actual space between the left and right player control stacks and disappears when there is not enough room.
+- v2.37 adds a dedicated presentation layer for the episode title so its font, sizing, contrast, and vertical position stay polished across player sizes and control-layout changes.
+- When the extension is turned off, its injected styles and episode-list changes are removed.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning above the player controls. Existing v2.36 behavior remains intact. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
@@ -59,6 +62,7 @@ Better-Crunchyroll/
 ├── styles.css
 ├── v221.js
 ├── v236.js
+├── v237.js
 ├── icons/
 └── versions/
 ```
