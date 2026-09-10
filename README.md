@@ -1,12 +1,12 @@
 # Better Crunchyroll
 
-**Version 0.2.36** fixes upcoming-episode title hiding by targeting both the hover title and the always-visible episode-card title, and removes the duplicate legacy spoiler engine from the content-script stack.
+**Version 0.2.37** adds a preferred video-resolution selector that can constrain Crunchyroll's adaptive HLS stream while preserving the existing player and episode-list enhancements.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
 - Keeps the main popup focused on the extension logo, master on/off control, settings button, and version footer.
 - Opens a dedicated settings view that replaces the main popup content until the Back control is pressed.
-- Uses grouped settings for **Skipping**, **Keyboard shortcuts**, and **Blurring & hiding**.
+- Uses grouped settings for **Playback**, **Skipping**, **Keyboard shortcuts**, and **Blurring & hiding**.
 - Uses dedicated on/off toggle controls instead of native HTML checkboxes.
 - Stages settings changes locally until **Confirm** is clicked.
 - Clicking **Confirm** saves settings and reloads the active Crunchyroll tab.
@@ -15,10 +15,15 @@
 - Supports optional spoiler protection: blur upcoming episode thumbnails and hide upcoming episode titles.
 - Spoiler protection uses Crunchyroll's semantic episode-list markers and follows dynamically rendered/lazy-loaded episode lists.
 - Hidden upcoming titles are visually hidden without rewriting or destroying the native Crunchyroll episode links.
+- Adds preferred video quality choices: **Auto**, **2160p**, **1440p**, **1080p**, **720p**, **480p**, **360p**, and **240p**.
+- Quality control is opt-in and defaults to **Auto**, leaving Crunchyroll's normal adaptive behavior unchanged.
+- When a requested resolution is unavailable for a title, the quality controller falls back to the closest available resolution at or below the requested height, or the lowest available height when necessary.
+- Quality control works by rewriting the HLS master playlist before Crunchyroll's player selects a video representation; it does not replace the native player or DRM path.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.37** | Added preferred video-resolution control using an isolated page-context HLS master-playlist hook, plus popup setting persistence and version updates. Existing player/episode logic remains untouched. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
@@ -26,7 +31,7 @@
 | **2.26** | Fixed popup view separation/navigation, removed obsolete capture-hint logic, hardened keyboard and skip controls, and ensured disabled spoiler settings have no effect. |
 | **2.25** | Main/settings popup separation, full-popup settings view, centered Settings header, Back button, and removal of shortcut helper text. |
 | **2.24** | Refined popup flow: balanced main view, dedicated full settings view, scrollable settings, and clear Confirm/apply state. |
-| **2.23** | Expanded grouped settings UI, custom toggles, staged Confirm/apply flow with Crunchyroll reload, custom settings scrollbar, and softer/slightly smaller spoiler thumbnail blur. |
+| **2.23** | Expanded grouped settings UI, custom toggles, staged Confirm/apply flow with Crunchyroll reload, custom settings scrollbar, and softer/slightly smaller upcoming-thumbnail blur. |
 | **2.22** | Keyboard shortcuts, automatic recap/intro/credits skipping, and optional upcoming-episode spoiler protection. |
 | **2.21** | Episode-list hover metadata fix, current-episode centering, custom scrollbar, and responsive episode-title alignment/hiding. |
 | **2.20** | Safe CSS-only conversion of the real `erc-playable-collection.state-dt-condensed` episode grid into a vertical list; no DOM reparenting and no player-button changes. |
@@ -59,6 +64,8 @@ Better-Crunchyroll/
 ├── styles.css
 ├── v221.js
 ├── v236.js
+├── v237.js
+├── v237-page.js
 ├── icons/
 └── versions/
 ```
