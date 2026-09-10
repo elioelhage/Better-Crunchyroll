@@ -95,7 +95,7 @@ Crunchyroll is a trademark of its respective owner. This project does not provid
 
 | Version | Highlights |
 | --- | --- |
-| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning above the scrubber while keeping it centered between the player controls. Existing v2.36 behavior remains intact. |
+| **2.37** | Refined the in-player episode title with improved typography, responsive sizing, stronger text contrast, and dynamic positioning vertically centered within the bottom player control bar while keeping it centered between the surrounding controls. Existing v2.36 behavior remains intact. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
 | **2.30** | Reworked spoiler protection to follow recreated/lazy-loaded episode lists across show changes and SPA navigation; upcoming titles are replaced with Episode X when hiding is enabled. |
