@@ -1,5 +1,5 @@
 const STORAGE_KEY='betterCrunchyrollEnabled';
-const VERSION='0.2.29';
+const VERSION='0.2.31';
 chrome.runtime.onInstalled.addListener(async()=>{const stored=await chrome.storage.local.get(STORAGE_KEY);if(!(STORAGE_KEY in stored))await chrome.storage.local.set({[STORAGE_KEY]:true});await syncBadge()});
 chrome.runtime.onStartup.addListener(syncBadge);
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local'&&changes[STORAGE_KEY])syncBadge()});
