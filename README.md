@@ -1,26 +1,25 @@
 # Better Crunchyroll
 
-**Version 0.2.19** focuses on the actual rendered episode-list structure used by Crunchyroll.
+**Version 0.2.20** keeps the v2.18 player and button behavior intact and adds a safe, CSS-only episode-list layout change.
 
 ## What it does
 - Preserves the native Crunchyroll player skin in fullscreen.
-- Adds a compact Crunchyroll-style Back control with a transparent idle circle and hover/focus circle.
+- Keeps the v2.18 Back button and other player controls unchanged.
 - Shows the current episode title in the player controls.
 - Adds an episode-list control styled to fit the native player.
 - Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
 - Uses the Better Crunchyroll artwork with colored/grayscale icon states and no ON/OFF badge.
-- Includes a compact popup with a colored/grayscale logo, enable/disable switch, and version footer.
-- Targets the actual `div.content-wrapper--MF5LS.episode-list-content` wrapper in the open episode dialog.
-- Converts the real `.erc-playable-collection > .card` episode tiles inside that wrapper into a vertical list with smaller left-side thumbnails.
-- Orders episodes **E1 → latest** and positions the modal on the episode currently being watched.
-- Fades watched episodes.
-- Keeps the episode-list SVG unchanged and shifts only the Back-button SVG for optical alignment.
-- When the extension is turned off, its injected styles, controls, overlays, Discover changes, and episode-list markers are removed.
+- Includes a compact popup with the extension logo, enable/disable switch, and version footer.
+- Changes only the native `erc-playable-collection state-dt-condensed` episode grid into a vertical list inside the real `erc-episode-list-modal`.
+- Keeps Crunchyroll's episode DOM intact: no sorting, cloning, reparenting, or card movement is performed in v2.20.
+- Uses smaller left-side thumbnails with episode information on the right.
+- Retains the existing extension-off cleanup behavior.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
-| **2.19** | Targets the actual `content-wrapper--MF5LS.episode-list-content` → `erc-season-episode-list` → `episode-list` → `erc-playable-collection` → `.card` hierarchy and converts the real episode tiles into a vertical list. |
+| **2.20** | Safe CSS-only conversion of the real `erc-playable-collection.state-dt-condensed` episode grid into a vertical list; no DOM reparenting and no player-button changes. |
+| **2.19** | Targets the actual `content-wrapper--MF5LS.episode-list-content` hierarchy and attempts a full episode-list transformation. |
 | **2.18** | Back-button optical refinement and episode-list implementation cleanup. |
 | **2.17** | Episode-list modal work, fullscreen Back control, extension-off cleanup, and player-control refinements. |
 | **2.16** | Reworked the visible episode-list modal and popup logo state synchronization. |
@@ -47,7 +46,7 @@ Better-Crunchyroll/
 ├── popup.html
 ├── popup.js
 ├── styles.css
-├── v219.js
+├── v220.js
 ├── icons/
 └── versions/
 ```
