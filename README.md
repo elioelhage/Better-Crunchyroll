@@ -1,11 +1,12 @@
 # Better Crunchyroll
 
-**Version 0.2.24** refines the popup so the main screen stays focused on the logo, master toggle, and version while settings take over the popup when opened.
+**Version 0.2.25** refines the popup so the main screen stays focused on the logo, master toggle, settings button, and version while settings take over the entire popup when opened.
 
 ## What it does
 - Preserves the stable player and episode-list experience from v2.20/v2.21.
 - Keeps the main popup focused on the large extension logo, master on/off control, settings button, and version footer with balanced vertical spacing.
-- Opens a dedicated settings view that takes over the popup instead of sharing space with the main controls.
+- Opens a dedicated settings view that takes over the whole popup when opened; the main popup content is hidden until the Back control is pressed.
+- Uses a centered **Settings** title and a compact circular Back button instead of a plain text Back link.
 - Keeps settings scrollable with a custom gray scrollbar.
 - Uses dedicated on/off toggle controls for each setting instead of native HTML checkboxes.
 - Stages setting changes locally until **Confirm** is clicked.
@@ -14,10 +15,12 @@
 - Keeps configurable keyboard shortcuts: **S** skip active intro/recap/credits, **P** previous episode, **N** next episode by default.
 - Adds independent automatic skip toggles for **recap**, **intro**, and **credits**, all OFF by default.
 - Adds optional spoiler protection in the episode list: blur upcoming episode thumbnails and hide upcoming episode titles.
+- Removes the unnecessary shortcut capture helper text from the settings view.
 
 ## Version History
 | Version | Highlights |
 | --- | --- |
+| **2.25** | Main/settings popup separation, full-popup settings view, centered Settings header, circular Back button, and removal of shortcut helper text. |
 | **2.24** | Refined popup flow: balanced main view, dedicated full settings view, scrollable settings, and clear Confirm/apply state. |
 | **2.23** | Expanded grouped settings UI, custom toggles, staged Confirm/apply flow with Crunchyroll reload, custom settings scrollbar, and softer/slightly smaller spoiler thumbnail blur. |
 | **2.22** | Focused settings panel, configurable S/P/N shortcuts, automatic recap/intro/credits skipping, and optional upcoming-episode spoiler protection. |
