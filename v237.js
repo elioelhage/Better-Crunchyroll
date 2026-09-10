@@ -22,7 +22,7 @@
         font-family: inherit !important;
         font-size: clamp(14px, 1vw, 19px) !important;
         font-weight: 600 !important;
-        line-height: 1.2 !important;
+        line-height: 1.22 !important;
         letter-spacing: normal !important;
         text-align: center !important;
         white-space: nowrap !important;
@@ -58,9 +58,9 @@
     )).filter((element) => {
       if (!(element instanceof HTMLElement)) return false;
       const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return style.display !== 'none'
-        && style.visibility !== 'hidden'
+      const computed = getComputedStyle(element);
+      return computed.display !== 'none'
+        && computed.visibility !== 'hidden'
         && rect.width > shellRect.width * 0.45
         && rect.height > 0
         && rect.height <= 32
@@ -106,8 +106,6 @@
     title.style.setProperty('max-width', `${maxWidth}px`, 'important');
     title.style.setProperty('transform', 'translateX(-50%)', 'important');
 
-    // Center the title in the bottom control row, then nudge it upward by
-    // 3px for optical alignment with Crunchyroll's native controls.
     const controlsTop = Math.min(leftRect.top, rightRect.top);
     const controlsBottom = Math.max(leftRect.bottom, rightRect.bottom);
     const controlsCenter = (controlsTop + controlsBottom) / 2 - 3;
