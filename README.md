@@ -16,6 +16,7 @@
 - Automatically **centers the current episode** when the episode list opens.
 - Keeps **Dub | Sub** metadata visible while episode cards are hovered.
 - Adds a compact **custom scrollbar** to the episode-list area.
+- Keeps the episode list responsive on **desktop monitors and wider displays**.
 - Moves **Continue Watching** directly below **Trending in Canada** on the Discover page.
 
 ### Spoiler Protection
@@ -66,6 +67,7 @@ Better-Crunchyroll/
 ├── v221.js
 ├── v236.js
 ├── v237.js
+├── v238.js
 ├── icons/
 └── versions/
 ```
@@ -82,6 +84,7 @@ Crunchyroll is a trademark of its respective owner. This project does not provid
 
 | Version | Highlights |
 | --- | --- |
+| **2.38** | Fixed the episode-list modal on larger desktop and monitor displays. Added responsive modal sizing, a stable flex-based scroll region, full-width episode cards, and wide-monitor breakpoints without changing episode detection, spoiler logic, or player controls. |
 | **2.37** | Refined the in-player episode title with more native-looking typography and a 3px optical lift while keeping it centered inside the bottom player control bar. Existing v2.36 behavior remains intact. |
 | **2.36** | Fixed upcoming-episode title hiding: Crunchyroll renders the hover title and the visible card title as separate elements, so both are now hidden. The extension also runs a single spoiler engine instead of loading the legacy v2.32 spoiler implementation alongside it. |
 | **2.31** | Fixed the episode-list modal opening regression by removing the global DOM observation loop; spoiler protection remains scoped to episode collections and is refreshed safely after navigation and modal interactions. |
