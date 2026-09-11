@@ -1,1 +1,0 @@
-Refined v2.38 desktop episode-list layout is present in v238.js.
