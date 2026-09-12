@@ -15,11 +15,8 @@ It focuses on the things that matter most while watching: cleaner player control
 ### 📺 Better episode navigation
 - Converts the episode collection into a **compact vertical episode list** that is easier to scan.
 - **Centers the current episode** when the list opens.
-- The Episodes control uses a **progressive fallback system** so it can work across Crunchyroll's different responsive layouts:
-  1. Open the native episode UI normally.
-  2. If that fails, temporarily spoof the page's responsive viewport without changing the browser's visible zoom.
-  3. If that still fails, use the proven **80% tab-zoom fallback** and restore the user's original zoom afterward.
-- Improves Discover-page organization by placing **Continue Watching** directly below **Trending in Canada**.
+- The Episodes control supports Crunchyroll's different responsive layouts through fallback handling, while retaining a reliable recovery path for problematic displays.
+- Improves Discover-page organization by placing **Continue Watching** directly below **Trending in Country**.
 
 ### 🛡️ Spoiler protection
 - **Blur upcoming episode thumbnails** so future visuals are less likely to spoil you.
@@ -87,6 +84,7 @@ Because Crunchyroll's interface is dynamic and changes its markup and responsive
 
 | Version | Highlights |
 | --- | --- |
+| **2.44** | Refined episode navigation around Crunchyroll's responsive layouts, with a dedicated custom episode-list presentation available alongside the native experience where needed. Improved episode-list sizing and presentation, including a cleaner dark visual treatment, responsive dimensions, current-episode emphasis, and spoiler-aware episode states. |
 | **2.41** | Episode opening now follows a three-stage responsive strategy: normal opening first, an invisible responsive-viewport spoof second, and the proven 80% tab-zoom fallback only as a final recovery path. The custom episode title is now anchored to the true player center so timer-width changes cannot make it drift. Updated extension versioning and rewritten README. |
 | **2.40** | Added the adaptive episode-opening fallback: smaller layouts keep the normal opening path, while failed openings can recover through the temporary 80% zoom method. |
 | **2.38** | Skip intro/recap/credits now uses Crunchyroll's own skip-events timing data. Hardened episode-list opening at problematic resolutions and removed the previous-episode shortcut. |
