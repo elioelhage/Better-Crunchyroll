@@ -36,6 +36,12 @@
           <div class="setting-row"><span>Skip credits automatically</span><button id="autoSkipCredits" class="setting-toggle" type="button" role="switch" aria-checked="false"><span></span></button></div>
         </section>
 
+        <section class="settings-section" aria-labelledby="episodeFlowSectionTitle">
+          <div id="episodeFlowSectionTitle" class="section-title">Episode flow</div>
+          <div class="setting-row"><span>Go to next episode after credits</span><button id="autoNextAfterCredits" class="setting-toggle" type="button" role="switch" aria-checked="false"><span></span></button></div>
+          <div class="setting-row"><span>Animate episode list opening</span><button id="animateEpisodeList" class="setting-toggle" type="button" role="switch" aria-checked="true"><span></span></button></div>
+        </section>
+
         <section class="settings-section" aria-labelledby="shortcutSectionTitle">
           <div id="shortcutSectionTitle" class="section-title">Keyboard shortcuts</div>
           <button class="shortcut-row" data-shortcut="skip" type="button"><span>Skip active intro / recap / credits</span><kbd id="shortcutSkip">S</kbd></button>
@@ -51,7 +57,7 @@
         <button id="confirmButton" class="confirm-button" type="button" disabled>Confirm</button>
       </section>
 
-      <footer id="popupFooter" class="popup__footer"><span id="versionText">v2.43</span></footer>
+      <footer id="popupFooter" class="popup__footer"><span id="versionText">v2.53</span></footer>
     </main>
     <script src="popup.js"></script>
   </body>
