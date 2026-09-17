@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'betterCrunchyrollEnabled';
-const VERSION = '0.2.53';
+const VERSION = '0.2.54';
 const SKIP_EVENTS_BASE = 'https://static.crunchyroll.com/skip-events/production/';
 
 async function syncBadge() {
