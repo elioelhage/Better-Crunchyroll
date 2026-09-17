@@ -55,6 +55,7 @@
 
 | Version | Highlights |
 | --- | --- |
+| **2.54** | Stabilized the Episodes button beside Captions on final episodes, made the custom episode-list fallback open inside fullscreen, and made final-episode credit skipping stop after credits instead of attempting a nonexistent next episode. |
 | **2.53** | Added a faster episode-list opening animation that starts at the oldest episode and smoothly moves to the current episode. Added a Settings option to disable the animation for long series. Updated version and footer information throughout the release. |
 | **2.45** | Added optional **Go to next episode after credits** behavior, allowing the player to move directly to the next episode when the credits begin. |
 | **2.44** | Refined episode navigation and the custom episode-list presentation around Crunchyroll's responsive layouts. |
