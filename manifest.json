@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Better Crunchyroll",
-  "version": "0.2.54",
+  "version": "0.2.59",
   "description": "Improves the Crunchyroll watch experience with a persistent control panel, cleaner watch-page layout, and a streamlined Discover page.",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Better Crunchyroll"
   },
   "background": {
-    "service_worker": "v241-background.js"
+    "service_worker": "background.js"
   },
   "permissions": [
     "storage",
@@ -23,12 +23,13 @@
         "*://*.crunchyroll.com/*"
       ],
       "js": [
-        "crunchyroll-content.js",
-        "v221.js",
-        "v236.js",
-        "v237.js",
-        "v241.js",
-        "v254.js"
+        "content.js",
+        "pip.js",
+        "page-tweaks.js",
+        "skipping.js",
+        "episode-title.js",
+        "episode-modal.js",
+        "next-preview.js"
       ],
       "run_at": "document_start"
     }
@@ -43,7 +44,8 @@
     {
       "resources": [
         "icons/back-button.svg",
-        "icons/episodes.svg"
+        "icons/episodes.svg",
+        "icons/pip.svg"
       ],
       "matches": [
         "*://*.crunchyroll.com/*"
