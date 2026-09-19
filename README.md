@@ -22,3 +22,7 @@ A Firefox build of Better Crunchyroll. This branch is the Firefox source of trut
 ## Release
 
 Firefox releases are built from this branch by the repository's GitHub Actions release workflow.
+
+
+
+| 2.60 | Fixed spoiler protection so the Next Episode hover preview remains clear even when upcoming episode thumbnails are blurred. Updated version metadata to 2.60. |
