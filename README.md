@@ -1,65 +1,79 @@
-# Better Crunchyroll
+# Better Crunchyroll 🎬
 
-A Chrome/Chromium extension that cleans up the Crunchyroll watch page: a custom control bar, easier episode navigation, spoiler protection, automatic skipping, and picture-in-picture.
+**Better Crunchyroll** is a community-made browser extension that improves the Crunchyroll watch experience while keeping Crunchyroll's familiar look and native player.
 
-## Features
+It is developed for **Chromium-based browsers (Chrome/Edge)** and **Firefox**, with browser-specific builds where necessary.
 
-**Player**
-- Episode title in the control bar
-- Back button in fullscreen
-- Episodes button next to the player controls
-- Picture-in-picture button, right next to fullscreen
+## ✨ Main Features
 
-**Picture in picture**
-- Own floating window with three sizes: compact, larger (double-click, or the size button) and fullscreen
-- Play/pause, seek bar, mute, skip intro/recap/credits button, keyboard shortcuts (Space, arrows, M, F, plus your skip/next keys)
-- Remembers the last size; falls back to the browser's built-in PiP where the custom window isn't supported
+### 🎥 Better playback
+- **Custom episode title** built into the player control bar.
+- **Fullscreen Back button** for quicker navigation without leaving the player.
+- **Dedicated Episodes button** integrated with the player controls.
+- **Picture-in-picture** with a Better Crunchyroll floating window, including compact, larger, and fullscreen stages where supported.
+- Cleaner fullscreen presentation while keeping Crunchyroll's native video player.
 
-**Episode list**
-- Compact vertical list, centered on the current episode
-- Opening animation (starts at the oldest episode, scrolls to the current one), can be turned off in Settings
+### 📺 Better episode navigation
+- Compact vertical episode-list presentation.
+- Current episode is centered when the list opens.
+- Responsive fallbacks support Crunchyroll's different layouts.
+- A short opening animation starts at the oldest episode and moves to the current episode; this can be disabled in Settings for long series.
 
-**Next episode preview**
-- Hover the Next Episode button to see a small card above it with the next episode's thumbnail and title
-- Follows the spoiler settings below (blurred thumbnail, hidden title), and can be turned off in Settings
+### 🛡️ Spoiler protection
+- **Blur upcoming episode thumbnails**.
+- **Hide upcoming episode titles** while preserving the original episode links and content.
+- The Next Episode preview follows the same spoiler settings.
 
-**Spoilers**
-- Blur thumbnails of upcoming episodes
-- Hide titles of upcoming episodes
+### ⏭️ Automatic skipping
+- Optional automatic skipping for **intros, recaps, and credits**.
+- Optional **Go to next episode after credits** behavior.
+- Final-episode credits are never skipped automatically.
 
-**Skipping**
-- Auto-skip intros, recaps and credits (each one is a separate setting, on by default)
-- Optional "go to next episode after credits"
-- The credits of a series' final episode are never skipped automatically
+### ⌨️ Keyboard controls
+- **S** — trigger the configured skip action.
+- **N** — move to the next episode.
+- Shortcuts can be customized in Settings.
 
-**Shortcuts**
-- `S` skips the current intro/recap/credits, `N` goes to the next episode. Both can be changed in Settings.
+## 🌐 Browser support
 
-## Install
-
-1. Download or clone this repository.
-2. Open `chrome://extensions` and enable Developer mode.
-3. Click Load unpacked and select the folder that contains `manifest.json`.
-
-Manifest V3, Chromium-based browsers, `*.crunchyroll.com` only.
-
-## Changelog
-
-| Version | Changes |
+| Browser | Build |
 | --- | --- |
-| 2.59 | Fixed the Next Episode hover preview: it now reads Crunchyroll's own "up next" widget directly instead of trying to infer the next episode from the (modal-only) episode list, so it works right away instead of only after opening the episode list once. Popup now animates between the main page and Settings instead of switching instantly. |
-| 2.58 | Hovering Next Episode shows a preview card with the next episode's thumbnail and title (setting in the spoilers section). Hover circles on the back, episodes and picture-in-picture buttons now share one darker gray. The picture-in-picture window setting is gone: the button always opens the Better Crunchyroll window when the browser supports it. |
-| 2.57 | Hover circle on the control buttons no longer shrinks them, and is a lighter neutral gray on all three buttons. Picture-in-picture is now its own window with compact, larger and fullscreen stages, with a setting to switch back to the browser's PiP. Both support links share a row. |
-| 2.56 | Picture-in-picture button next to fullscreen. Stripe donation link in the popup. Removed dead code and unused files. |
-| 2.55 | Credits of the final episode are never auto-skipped. Failed skip-data lookups are retried. Loading animation matches Crunchyroll's. Skipping is on by default. Donation link in the popup. |
-| 2.54 | Episodes button keeps its slot on the final episode. Custom episode list opens over fullscreen. |
-| 2.53 | Faster episode-list opening animation, with a setting to turn it off. |
-| 2.45 | "Go to next episode after credits" option. |
-| 2.44 | Episode navigation tweaks for responsive layouts. |
-| 2.41 | Fallbacks for opening the episode list, steadier in-player title. |
-| 2.40 | Zoom-based fallback for opening the episode list. |
-| 2.38 | Skipping now uses Crunchyroll's skip-event timings. |
+| **Chrome** | Chromium build |
+| **Microsoft Edge** | Chromium build |
+| **Firefox** | Firefox-specific build |
 
-## Disclaimer
+The Firefox version is maintained separately because Firefox requires browser-specific manifest configuration and can require small compatibility changes that do not belong in the Chromium build.
 
-Independent community project, not affiliated with or endorsed by Crunchyroll LLC. It does not provide or redistribute Crunchyroll content.
+## 🌿 Repository branches
+
+- **`main`** — Chromium source of truth for Chrome/Edge.
+- **`main-firefox`** — Firefox source of truth.
+- Older release branches are historical/development branches.
+
+## 🚀 Installation
+
+### Chrome / Edge
+1. Download or clone the repository.
+2. Open the browser's extensions page.
+3. Enable Developer mode.
+4. Load the Chromium build as an unpacked extension.
+
+### Firefox
+Use the Firefox build from **`main-firefox`** or the published Better Crunchyroll listing on Mozilla Add-ons.
+
+## 📌 Version History
+
+| Version | Highlights |
+| --- | --- |
+| **2.59** | Fixed the Next Episode hover preview so it reads Crunchyroll's own “up next” widget directly. The popup now animates between the main page and Settings. |
+| **2.58** | Added the Next Episode hover preview, refined control-button hover circles, and made Better Crunchyroll's PiP window the default where supported. |
+| **2.57** | Added the Better Crunchyroll PiP window with compact, larger, and fullscreen stages. |
+| **2.56** | Added the PiP button beside fullscreen and the Stripe donation link. |
+| **2.55** | Improved final-episode credit behavior, skip-data retries, and loading animation. |
+| **2.54** | Stabilized the Episodes button and fullscreen episode-list fallback. |
+
+## ⚠️ Disclaimer
+
+Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
+
+Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
