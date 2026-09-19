@@ -77,3 +77,7 @@ Use the Firefox build from **`main-firefox`** or the published Better Crunchyrol
 Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
 
 Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
+
+
+
+| 2.60 | Fixed spoiler protection so the Next Episode hover preview remains clear even when upcoming episode thumbnails are blurred. Updated version metadata to 2.60. |
