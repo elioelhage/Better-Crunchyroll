@@ -11,27 +11,36 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set version
+      - name: Set release version
         id: version
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+(\.[0-9]+){1,2}$ ]]; then
+            echo "Invalid release tag: $GITHUB_REF_NAME"
+            exit 1
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Validate manifest version
-        shell: bash
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          node -e "const m=require('./manifest.json'); if(m.version!==process.argv[1]) { console.error('manifest.json is '+m.version+', expected '+process.argv[1]); process.exit(1); }" "$VERSION"
-
-      - name: Prepare packages
+      - name: Validate required source files
         shell: bash
         run: |
           set -euo pipefail
+          test -f manifest.json
+          test -f background.js
+          test -f popup.html
+          test -f popup.js
+
+      - name: Prepare browser packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
           rm -rf dist
           mkdir -p dist/chrome dist/edge dist/firefox
 
@@ -39,6 +48,10 @@ jobs:
           rsync -a --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/edge/
           rsync -a --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/firefox/
 
+          # The Git tag is the release source of truth.
+          node -e 'const fs=require("fs"); for (const dir of ["chrome","edge","firefox"]) { const p=`dist/${dir}/manifest.json`; const m=JSON.parse(fs.readFileSync(p,"utf8")); m.version=process.argv[1]; fs.writeFileSync(p,JSON.stringify(m,null,2)+"\n"); }' "$VERSION"
+
+          # Firefox-only AMO metadata. Chrome/Edge do not receive this block.
           node <<'NODE'
           const fs = require('fs');
           const path = 'dist/firefox/manifest.json';
@@ -46,72 +59,43 @@ jobs:
           manifest.browser_specific_settings = {
             gecko: {
               id: 'better-crunchyroll@elioelhage',
-              data_collection_permissions: { required: ['none'] }
+              strict_min_version: '109.0',
+              data_collection_permissions: {
+                required: ['none']
+              }
             }
           };
           fs.writeFileSync(path, JSON.stringify(manifest, null, 2) + '\n');
           NODE
 
-          (cd dist/chrome && zip -qr "../Better-Crunchyroll-v${{ steps.version.outputs.version }}-Chrome.zip" .)
-          (cd dist/edge && zip -qr "../Better-Crunchyroll-v${{ steps.version.outputs.version }}-Edge.zip" .)
-          (cd dist/firefox && zip -qr "../Better-Crunchyroll-v${{ steps.version.outputs.version }}-Firefox.zip" .)
+          (cd dist/chrome && zip -qr "../Better-Crunchyroll-v${VERSION}-Chrome.zip" .)
+          (cd dist/edge && zip -qr "../Better-Crunchyroll-v${VERSION}-Edge.zip" .)
+          (cd dist/firefox && zip -qr "../Better-Crunchyroll-v${VERSION}-Firefox.zip" .)
 
-      - name: Publish Chrome
-        if: env.CHROME_CLIENT_ID != ''
-        env:
-          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      - name: Validate Firefox package
+        shell: bash
         run: |
-          npm install --global chrome-webstore-upload-cli
-          webstore upload --source "dist/Better-Crunchyroll-v${{ steps.version.outputs.version }}-Chrome.zip" \
-            --extension-id "$CHROME_EXTENSION_ID" \
-            --client-id "$CHROME_CLIENT_ID" \
-            --client-secret "$CHROME_CLIENT_SECRET" \
-            --refresh-token "$CHROME_REFRESH_TOKEN"
-          webstore publish --extension-id "$CHROME_EXTENSION_ID" \
-            --client-id "$CHROME_CLIENT_ID" \
-            --client-secret "$CHROME_CLIENT_SECRET" \
-            --refresh-token "$CHROME_REFRESH_TOKEN"
+          set -euo pipefail
+          unzip -p "dist/Better-Crunchyroll-v${{ steps.version.outputs.version }}-Firefox.zip" manifest.json > /tmp/firefox-manifest.json
+          node -e 'const m=require("/tmp/firefox-manifest.json"); if(m.version!==process.argv[1]) process.exit(1); if(m.browser_specific_settings?.gecko?.id!=="better-crunchyroll@elioelhage") process.exit(2);' "${{ steps.version.outputs.version }}"
 
-      - name: Publish Firefox
-        if: env.AMO_JWT_ISSUER != ''
+      - name: Submit Firefox update to AMO
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
         run: |
-          npm install --global web-ext
-          web-ext sign --source-dir dist/firefox \
-            --api-key "$AMO_JWT_ISSUER" \
-            --api-secret "$AMO_JWT_SECRET" \
-            --channel listed
-
-      - name: Publish Edge
-        if: env.EDGE_PRODUCT_ID != ''
-        env:
-          EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
-          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
-          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
-        run: |
           set -euo pipefail
-          ZIP="dist/Better-Crunchyroll-v${{ steps.version.outputs.version }}-Edge.zip"
-          RESPONSE=$(curl -sS -X POST \
-            "https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID/submissions/draft/package" \
-            -H "Authorization: ApiKey $EDGE_API_KEY" \
-            -H "X-ClientID: $EDGE_CLIENT_ID" \
-            -F "file=@$ZIP;type=application/zip")
-          echo "$RESPONSE"
-          curl -sS -X POST \
-            "https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID/submissions" \
-            -H "Authorization: ApiKey $EDGE_API_KEY" \
-            -H "X-ClientID: $EDGE_CLIENT_ID" \
-            -H "Content-Type: application/json" \
-            -d '{}'
+          npm install --global web-ext
+          web-ext sign \
+            --source-dir dist/firefox \
+            --channel listed \
+            --api-key "$AMO_JWT_ISSUER" \
+            --api-secret "$AMO_JWT_SECRET"
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
+          generate_release_notes: true
           files: |
             dist/Better-Crunchyroll-v${{ steps.version.outputs.version }}-Chrome.zip
             dist/Better-Crunchyroll-v${{ steps.version.outputs.version }}-Edge.zip
