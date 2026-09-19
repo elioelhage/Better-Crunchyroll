@@ -125,11 +125,15 @@ jobs:
         run: |
           set -euo pipefail
           npm install --global web-ext
+          AMO_API_KEY="$(printf '%s' "$AMO_JWT_ISSUER" | tr -d '\r\n')"
+          AMO_API_SECRET="$(printf '%s' "$AMO_JWT_SECRET" | tr -d '\r\n')"
+          [[ -n "$AMO_API_KEY" ]]
+          [[ -n "$AMO_API_SECRET" ]]
           web-ext sign \
             --source-dir . \
             --channel listed \
-            --api-key "$AMO_JWT_ISSUER" \
-            --api-secret "$AMO_JWT_SECRET"
+            --api-key "$AMO_API_KEY" \
+            --api-secret "$AMO_API_SECRET"
 
       - name: Upload Firefox release asset
         uses: softprops/action-gh-release@v2
