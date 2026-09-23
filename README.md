@@ -65,6 +65,7 @@ Use the Firefox build from **`main-firefox`** or the published Better Crunchyrol
 
 | Version | Highlights |
 | --- | --- |
+| **2.98** | Added configurable seek amount, Next Episode hover preview functionality, and related playback/episode-flow features; removed the subtitle toggle from Settings. |
 | **2.59** | Fixed the Next Episode hover preview so it reads Crunchyroll's own “up next” widget directly. The popup now animates between the main page and Settings. |
 | **2.58** | Added the Next Episode hover preview, refined control-button hover circles, and made Better Crunchyroll's PiP window the default where supported. |
 | **2.57** | Added the Better Crunchyroll PiP window with compact, larger, and fullscreen stages. |
@@ -77,7 +78,3 @@ Use the Firefox build from **`main-firefox`** or the published Better Crunchyrol
 Better Crunchyroll is an independent community project and is not affiliated with, sponsored by, or endorsed by Crunchyroll LLC.
 
 Crunchyroll is a trademark of its respective owner. This project does not provide or redistribute Crunchyroll content.
-
-
-
-| 2.60 | Fixed spoiler protection so the Next Episode hover preview remains clear even when upcoming episode thumbnails are blurred. Updated version metadata to 2.60. |
